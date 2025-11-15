@@ -1,5 +1,5 @@
 # TCMVE — Truth-Convergent Metaphysical Verification Engine
-# TCMVE — Truth from Being
+**Truth from Being
 
 **Derives truth from *zero domain* using pure Thomistic metaphysics.**
 
