@@ -111,7 +111,7 @@
 \title{\textbf{A Truth-Convergent Metaphysical Verification Engine for LLM Output:\\
 An Iterative Multi-Agent Architecture for Eliminating Factual Error and Ontological Drift}}
 \author{
-\IEEEauthorblockN{Anonymous Authors}
+\IEEEauthorblockN{Eckhart Diestel}
 \IEEEauthorblockA{\textit{Submitted to IEEE Transactions on Artificial Intelligence}}
 }
 
@@ -169,7 +169,7 @@ Refute via metaphysical contradiction or say:
 \end{lstlisting}
 
 \subsection{Cross-LLM Orchestration Code}
-\begin{lstlisting}[language=Python, caption={Cross-LLM TCMVE Loop (tcmve_crossllm.py)}, label={lst:crossllm}]
+\begin{lstlisting}[language=Python, caption={Cross-LLM TCMVE Loop (tcmve.py)}, label={lst:crossllm}]
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain_groq import ChatGroq
@@ -424,7 +424,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
   </flag>
 
   <!-- USER & CONTEXT -->
-  <flag id="18" name="User" value="@ECKHART_DIESTEL">
+  <flag id="18" name="User" value="@ECKHART\_DIESTEL">
     <thomistic>Efficient Cause (Human)</thomistic>
     <effect>Initiator</effect>
     <virtue>auctoritas</virtue>
@@ -440,7 +440,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
   </flag>
 
   <!-- ONTOLOGY STATE -->
-  <flag id="20" name="Ontology State" value="zero_domain">
+  <flag id="20" name="Ontology State" value="zero\_domain">
     <thomistic>Pure Act</thomistic>
     <effect>No external data</effect>
     <virtue>aseitas</virtue>
@@ -530,7 +530,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
   <tqi_score>0.98</tqi_score>
   <metaphysical_alignment>
     <final_cause>healing</final_cause>
-    <efficient_cause>IV_bioavailability</efficient_cause>
+    <efficient_cause>IV_bioavailability</efficient\_cause>
     <material_cause>loop_diuretic</material_cause>
     <formal_cause>2x_multiplier</formal_cause>
   </metaphysical_alignment>
@@ -539,8 +539,8 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
     <user>@ECKHART_DIESTEL</user>
     <location>DE</location>
     <tcmve_version>1.0</tcmve_version>
-    <ontology_state>zero_domain</ontology_state>
-    <convergence_rounds>2</convergence_rounds>
+    <ontology_state>zero_domain</ontology\_state>
+    <convergence_rounds>2</convergence\_rounds>
     <tcs>0.97</tcs>
     <fd>0.91</fd>
     <es>0.94</es>
