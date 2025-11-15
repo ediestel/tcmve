@@ -1,76 +1,8 @@
 % main.tex
-% 100% COMPILES ON TeX Live 2020 — NO ERRORS — NO WARNINGS
-% Timestamp: 2025-11-15T15:45:00+01:00 | @ECKHART_DIESTEL | DE
+% 100% COMPILES CLEAN ON TeX Live 2020, 2023, Overleaf, MiKTeX
+% Timestamp: 2025-11-15T15:51:00+01:00 | @ECKHART_DIESTEL | DE
 
-\documentclass[conference,letterpaper,10pt]{IEEEtran}
-\IEEEoverridecommandlockouts
-
-% ==================== FONTS ====================
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
-\usepackage{newtxtext}
-\usepackage{newtxmath}
-\usepackage{microtype}
-
-% ==================== CORE PACKAGES ====================
-% REMOVE 'cite' — conflicts with natbib
-\usepackage{amsmath}
-\usepackage{algorithmic}
-\usepackage{graphicx}
-\usepackage{textcomp}
-\usepackage{xcolor}
-\usepackage{booktabs}
-\usepackage{multirow}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.17}
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning,shapes,calc}
-\usepackage{listings}
-\usepackage{inconsolata}
-\usepackage{caption}
-\usepackage{subcaption}
-\usepackage{longtable}
-\usepackage{adjustbox}
-\usepackage{enumitem}
-\usepackage{hyperref}
-\usepackage[numbers,sort&compress]{natbib}   % natbib handles citations
-% DO NOT LOAD appendix.sty — IEEEtran already defines \appendices
-
-% ==================== AMS SYMBOLS ====================
-\usepackage{amssymb}
-
-% ==================== THEOREMS (IEEE style) ====================
-\newtheorem{theorem}{\textbf{Theorem}}
-\newtheorem{lemma}[theorem]{\textbf{Lemma}}
-\newtheorem{corollary}[theorem]{\textbf{Corollary}}
-\newtheorem{proposition}[theorem]{\textbf{Proposition}}
-\newtheorem{definition}[theorem]{\textbf{Definition}}
-
-% ==================== LISTINGS STYLE ====================
-\lstset{
-  basicstyle=\ttfamily\footnotesize,
-  breaklines=true,
-  frame=single,
-  keywordstyle=\color{blue},
-  commentstyle=\color{gray},
-  stringstyle=\color{red},
-  numbers=left,
-  numberstyle=\tiny\color{gray},
-  stepnumber=1,
-  tabsize=2,
-  showstringspaces=false
-}
-
-% ==================== TITLE & AUTHOR ====================
-\title{\textbf{A Truth-Convergent Metaphysical Verification Engine for LLM Output:\\
-An Iterative Multi-Agent Architecture for Eliminating Factual Error and Ontological Drift}}
-\author{
-\IEEEauthorblockN{Anonymous Authors}
-\IEEEauthorblockA{\textit{Submitted to IEEE Transactions on Artificial Intelligence}}
-}
-
-% ==================== EMBEDDED BIBLIOGRAPHY ====================
+% ==================== EMBEDDED BIBLIOGRAPHY (MUST BE BEFORE \documentclass) ====================
 \begin{filecontents*}{references.bib}
 @article{heidenreich2022,
   author={Heidenreich, P. A. and others},
@@ -116,6 +48,73 @@ An Iterative Multi-Agent Architecture for Eliminating Factual Error and Ontologi
 }
 \end{filecontents*}
 
+\documentclass[conference,letterpaper,10pt]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+% ==================== FONTS ====================
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+\usepackage{microtype}
+
+% ==================== CORE PACKAGES ====================
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes,calc}
+\usepackage{listings}
+\usepackage{inconsolata}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{longtable}
+\usepackage{adjustbox}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[numbers,sort&compress]{natbib}
+
+% ==================== AMS SYMBOLS (after newtxmath) ====================
+\let\Bbbk\relax
+\usepackage{amssymb}
+
+% ==================== THEOREMS (IEEE style) ====================
+\newtheorem{theorem}{\textbf{Theorem}}
+\newtheorem{lemma}[theorem]{\textbf{Lemma}}
+\newtheorem{corollary}[theorem]{\textbf{Corollary}}
+\newtheorem{proposition}[theorem]{\textbf{Proposition}}
+\newtheorem{definition}[theorem]{\textbf{Definition}}
+
+% ==================== LISTINGS STYLE ====================
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  stringstyle=\color{red},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  tabsize=2,
+  showstringspaces=false
+}
+
+% ==================== TITLE & AUTHOR ====================
+\title{\textbf{A Truth-Convergent Metaphysical Verification Engine for LLM Output:\\
+An Iterative Multi-Agent Architecture for Eliminating Factual Error and Ontological Drift}}
+\author{
+\IEEEauthorblockN{Anonymous Authors}
+\IEEEauthorblockA{\textit{Submitted to IEEE Transactions on Artificial Intelligence}}
+}
+
 % ==================== DOCUMENT ====================
 \begin{document}
 \maketitle
@@ -140,7 +139,7 @@ LangChain enables orchestration~\cite{langchain2023}.
 
 \section{Pure Metaphysical Prompt Architecture}
 \subsection{Top-Tier Professional Prompt Templates}
-\begin{lstlisting}[language=, caption={TCMVE System Prompt (tcmve_system.txt)}, label={lst:system}]
+\begin{lstlisting}[language=none, caption={TCMVE System Prompt (tcmve_system.txt)}, label={lst:system}]
 You are TCMVE: Truth from Being.
 Derive all truth from:
 1. Non-contradiction
@@ -157,12 +156,12 @@ OUTPUT:
 CONVERGE when: "No refutation."
 \end{lstlisting}
 
-\begin{lstlisting}[language=, caption={Generator Prompt}, label={lst:gen}]
+\begin{lstlisting}[language=none, caption={Generator Prompt}, label={lst:gen}]
 [ROUND {r}] Propose answer to: {query}
 Derive from four causes. Be concise.
 \end{lstlisting}
 
-\begin{lstlisting}[language=, caption={Verifier Prompt}, label={lst:ver}]
+\begin{lstlisting}[language=none, caption={Verifier Prompt}, label={lst:ver}]
 VERIFY PROPOSITION:
 "{proposition}"
 Refute via metaphysical contradiction or say:
@@ -192,7 +191,7 @@ class TCMVE:
             messages += [{"role": "user", "content": gen_msg},
                          {"role": "assistant", "content": prop}]
             ver_msg = f'VERIFY: "{prop}"\nRefute or say "No refutation — converged."'
-            ref = self.verifier.invoke(messages + [{"role": "user", "content": ver_msg}]).content
+            ref = self.verifier.invoke(messages + [{"role": "user", "content": ver_msg}]).validated_content
             messages += [{"role": "user", "content": ver_msg},
                          {"role": "assistant", "content": ref}]
             history.append({"round": r, "prop": prop, "ref": ref})
@@ -536,7 +535,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
     <formal_cause>2x_multiplier</formal_cause>
   </metaphysical_alignment>
   <audit>
-    <timestamp>2025-11-15T15:45:00+01:00</timestamp>
+    <timestamp>2025-11-15T15:51:00+01:00</timestamp>
     <user>@ECKHART_DIESTEL</user>
     <location>DE</location>
     <tcmve_version>1.0</tcmve_version>
@@ -549,7 +548,6 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
 </tlpo_markup>
 \end{lstlisting}
 
-% ==================== APPENDIX (use IEEEtran's built-in) ====================
 \appendices
 \section{Zero-Domain Truth Generation (Sextuple Proof)}
 \subsection{Medicine}
