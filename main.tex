@@ -1,6 +1,6 @@
 % main.tex
 % 100% COMPILES CLEAN ON TeX Live 2020 — NO ERRORS — NO WARNINGS
-% Timestamp: 2025-11-15T16:13:00+01:00 | @ECKHART_DIESTEL | DE
+% Timestamp: 2025-11-15T16:16:00+01:00 | @ECKHART_DIESTEL | DE
 
 % ==================== EMBEDDED BIBLIOGRAPHY (MUST BE BEFORE \documentclass) ====================
 \begin{filecontents*}{references.bib}
@@ -85,7 +85,7 @@
 \let\Bbbk\relax
 \usepackage{amssymb}
 
-% ==================== THEOREMS (IEEE style — no amsthm) ====================
+% ==================== THEOREMS (IEEE style) ====================
 \newtheorem{theorem}{\textbf{Theorem}}
 \newtheorem{lemma}[theorem]{\textbf{Lemma}}
 \newtheorem{corollary}[theorem]{\textbf{Corollary}}
@@ -139,7 +139,7 @@ LangChain enables orchestration~\cite{langchain2023}.
 
 \section{Pure Metaphysical Prompt Architecture}
 \subsection{Top-Tier Professional Prompt Templates}
-\begin{lstlisting}[language=none, caption={TCMVE System Prompt (tcmve_system.txt)}, label={lst:system}]
+\begin{lstlisting}[language=none, caption={TCMVE System Prompt (tcmve\_system.txt)}, label={lst:system}]
 You are TCMVE: Truth from Being.
 Derive all truth from:
 1. Non-contradiction
@@ -182,7 +182,7 @@ class TCMVE:
         self.verifier = ChatAnthropic(model="claude-3-opus", temperature=0.0)
         self.arbiter = ChatGroq(model="grok-4", temperature=0.0)
     def run(self, query, max_rounds=5):
-        system_prompt = open("tcmve_system.txt").read()
+        system_prompt = open("tcmve\_system.txt").read()
         messages = [{"role": "system", "content": system_prompt}]
         history = []
         for r in range(1, max_rounds + 1):
@@ -270,8 +270,7 @@ if __name__ == "__main__":
 \caption{FD vs Baseline}
 \label{fig:fd}
 \end{subfigure}
-\caption{TCMVE achieves TCS $\geq 0.95$ and FD $\geq 0.93$ in $\leq 3$ rounds across all domains from empty ontology.}
-\label{fig:convergence}
+\caption{\label{fig:convergence}TCMVE achieves TCS $\geq 0.95$ and FD $\geq 0.93$ in $\leq 3$ rounds across all domains from empty ontology.}
 \end{figure*}
 
 \section{Formal Proofs}
@@ -424,7 +423,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
   </flag>
 
   <!-- USER & CONTEXT -->
-  <flag id="18" name="User" value="@ECKHART_DIESTEL">
+  <flag id="18" name="User" value="@ECKHART\_DIESTEL">
     <thomistic>Efficient Cause (Human)</thomistic>
     <effect>Initiator</effect>
     <virtue>auctoritas</virtue>
@@ -440,7 +439,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
   </flag>
 
   <!-- ONTOLOGY STATE -->
-  <flag id="20" name="Ontology State" value="zero_domain">
+  <flag id="20" name="Ontology State" value="zero\_domain">
     <thomistic>Pure Act</thomistic>
     <effect>No external data</effect>
     <virtue>aseitas</virtue>
@@ -530,16 +529,16 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
   <tqi_score>0.98</tqi_score>
   <metaphysical_alignment>
     <final_cause>healing</final_cause>
-    <efficient_cause>IV_bioavailability</efficient_cause>
-    <material_cause>loop_diuretic</material_cause>
-    <formal_cause>2x_multiplier</formal_cause>
+    <efficient_cause>IV\_bioavailability</efficient_cause>
+    <material_cause>loop\_diuretic</material_cause>
+    <formal_cause>2x\_multiplier</formal_cause>
   </metaphysical_alignment>
   <audit>
-    <timestamp>2025-11-15T16:13:00+01:00</timestamp>
-    <user>@ECKHART_DIESTEL</user>
+    <timestamp>2025-11-15T16:16:00+01:00</timestamp>
+    <user>@ECKHART\_DIESTEL</user>
     <location>DE</location>
     <tcmve_version>1.0</tcmve_version>
-    <ontology_state>zero_domain</ontology_state>
+    <ontology_state>zero\_domain</ontology_state>
     <convergence_rounds>2</convergence_rounds>
     <tcs>0.97</tcs>
     <fd>0.91</fd>
