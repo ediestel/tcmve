@@ -46,7 +46,7 @@ Benefits:
 
 #### **GitHub Repo**
 Clone from: `https://github.com/anonymous/tcmve` (hypothetical; create your own).  
-Includes: `main.tex`, `tcmve.py`, `tcmve_system.txt`, `tlpo_markup_schema_v1.2.xml`, `tlco_tcmve.json`, `tcmve_scoring.pt`, `requirements.txt`, `references.bib`.
+Includes: `main.tex`, `tcmve.py`, `tcmve_system.txt`, `tlpo_markup_schema_v1.2.xml`, `tlco_tcmve.json`, `tcmve_scoring.py`, `requirements.txt`, `references.bib`.
 
 ---
 
