@@ -15,6 +15,19 @@
 
 ## Quick Start
 ```bash
+
+# Now with  instaler script
+# Development install
+
+pip install -e .
+
+# Run via CLI
+tcmve
+
+Commit
+bashgit add setup.py MANIFEST.in
+git commit -m "Add setup.py + MANIFEST.in — pip install -e . ready"
+git push origin main
 # 1. Clone repo
 git clone https://github.com/ediestel/tcmve.git
 cd tcmve
