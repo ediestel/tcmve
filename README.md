@@ -1,5 +1,11 @@
 # TCMVE — Truth-Convergent Metaphysical Verification Engine
+# TCMVE — Truth from Being
 
+**Derives truth from *zero domain* using pure Thomistic metaphysics.**
+
+> **"Most true" beats "best" *at all times.**  
+> **Better is corrupt.**
+> 
 **Pure Thomistic Truth Generation from First Principles**
 
 - No domain ontology  
@@ -34,25 +40,8 @@ python tcmve_crossllm.py
 ## Paper
 See main.tex — IEEE submission ready.
 
-## Demos
-Medicine: Furosemide dose
-Engineering: Bridge load
-Law: GDPR
-Ethics: Withhold diagnosis
-Economics: Inheritance tax
-Physics: F = ma
-
-All from empty ontology. All converge in 2 rounds.
-
 ## TLPO
 30-flag diagnostic markup for transparency.
-
-# TCMVE — Truth from Being
-
-**Derives truth from *zero domain* using pure Thomistic metaphysics.**
-
-> **"Most true" beats "better" *always*.**  
-> **Better is corrupt.**
 
 ## 6 Zero-Domain Demos (All converge in 2 rounds)
 
