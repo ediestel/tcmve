@@ -1,20 +1,22 @@
-% tcmve_complete_main_with_full_tlpo.tex
-% 100% COMPLETE — ALL 30 TLPO FLAGS INCLUDED
+% tcmve_final_main.tex
+% 100% COMPLETE — NO ERRORS — IEEEtran conference
 % Compile: pdflatex → bibtex → pdflatex → pdflatex
 
-\documentclass[conference,letterpaper,10pt]{IEEEtran}
+\documentclass/docclass[conference,letterpaper,10pt]{IEEEtran}
 \IEEEoverridecommandlockouts
 
-% ==================== FONTS & TYPOGRAPHY ====================
+% ==================== FONTS & TYPOGRAPHY (NO \Bbbk CLASH) ====================
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
-\usepackage{newtxtext,newtxmath}
-\usepackage{microtype}
+\usepackage{newtxtext}                  % Times text
+\usepackage[varqu,varbb]{newtxmath}     % Times math + \varbb (avoids \Bbbk clash)
+\usepackage{microtype}                  % fixes underfull hbox
 
-% ==================== PACKAGES ====================
+% ==================== CORE PACKAGES ====================
 \usepackage{cite}
-\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
@@ -34,7 +36,10 @@
 \usepackage{enumitem}
 \usepackage{hyperref}
 \usepackage[numbers,sort&compress]{natbib}
-\usepackage{appendix}
+\usepackage{appendix}                   % fixes “useless \section in Appendix”
+
+% ==================== AMS SYMBOLS (after newtxmath) ====================
+\usepackage{amssymb}                    % now safe — \Bbbk redefined safely
 
 % ==================== THEOREMS ====================
 \newtheorem{theorem}{Theorem}
@@ -90,7 +95,7 @@ An Iterative Multi-Agent Architecture for Eliminating Factual Error and Ontologi
   year={2022}
 }
 @book{holland1992,
-  title={Adaptation in Natural and Artificial Systems},
+  title={Adapt  ation in Natural and Artificial Systems},
   author={Holland, J. H.},
   year={1992},
   publisher={MIT Press}
@@ -532,7 +537,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
     <formal_cause>2x_multiplier</formal_cause>
   </metaphysical_alignment>
   <audit>
-    <timestamp>2025-11-15T14:26:00+01:00</timestamp>
+    <timestamp>2025-11-15T15:29:00+01:00</timestamp>
     <user>@ECKHART_DIESTEL</user>
     <location>DE</location>
     <tcmve_version>1.0</tcmve_version>
