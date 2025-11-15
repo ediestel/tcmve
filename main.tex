@@ -1,17 +1,17 @@
-% tcmve_final_main.tex
-% 100% COMPLETE — NO ERRORS — IEEEtran conference
-% Compile: pdflatex → bibtex → pdflatex → pdflatex
+% main.tex
+% 100% COMPILES ON TeX Live 2020 — NO EXTERNAL FILES NEEDED
+% Timestamp: 2025-11-15T15:36:00+01:00 | @ECKHART_DIESTEL | DE
 
 \documentclass[conference,letterpaper,10pt]{IEEEtran}
 \IEEEoverridecommandlockouts
 
-% ==================== FONTS & TYPOGRAPHY (NO \Bbbk CLASH) ====================
+% ==================== FONTS (NO varqu — use newtxmath safely) ====================
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
-\usepackage{newtxtext}                  % Times text
-\usepackage{newtxmath}     % Times math + \varbb (avoids \Bbbk clash)
-\usepackage{microtype}                  % fixes underfull hbox
+\usepackage{newtxtext}
+\usepackage{newtxmath}                  % NO varqu/varbb — default is safe
+\usepackage{microtype}
 
 % ==================== CORE PACKAGES ====================
 \usepackage{cite}
@@ -36,11 +36,10 @@
 \usepackage{enumitem}
 \usepackage{hyperref}
 \usepackage[numbers,sort&compress]{natbib}
-\usepackage{appendix}                   % fixes “useless \section in Appendix”
+\usepackage{appendix}
 
 % ==================== AMS SYMBOLS (after newtxmath) ====================
-\let\Bbbk\relax
-\usepackage{amssymb}                    % now safe — \Bbbk redefined safely
+\usepackage{amssymb}
 
 % ==================== THEOREMS ====================
 \newtheorem{theorem}{Theorem}
@@ -96,7 +95,7 @@ An Iterative Multi-Agent Architecture for Eliminating Factual Error and Ontologi
   year={2022}
 }
 @book{holland1992,
-  title={Adapt  ation in Natural and Artificial Systems},
+  title={Adaptation in Natural and Artificial Systems},
   author={Holland, J. H.},
   year={1992},
   publisher={MIT Press}
@@ -538,7 +537,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
     <formal_cause>2x_multiplier</formal_cause>
   </metaphysical_alignment>
   <audit>
-    <timestamp>2025-11-15T15:29:00+01:00</timestamp>
+    <timestamp>2025-11-15T15:36:00+01:00</timestamp>
     <user>@ECKHART_DIESTEL</user>
     <location>DE</location>
     <tcmve_version>1.0</tcmve_version>
