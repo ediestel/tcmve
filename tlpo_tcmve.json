@@ -1,6 +1,6 @@
 {
-  "ontology_version": "1.1",
-  "ontology_name": "Thomistic LLM Parameter Ontology (TLPO) — TCMVE-Adapted",
+  "ontology_version": "1.2",
+  "ontology_name": "Thomistic LLM Parameter Ontology (TLPO) — TCMVE-Adapted v1.2",
   "description": "A unified, hierarchical ontology for LLM response generation parameters, analogically mapped to Thomistic metaphysics (e.g., essence/existence, act/potency, substance/accidents, and the four causes). Designed for guiding AI outputs toward balanced, purposeful reasoning, treating parameters as principles that shape the 'being' of responses. **Fully adapted for TCMVE**: integrates with truth-convergent verification, cross-LLM orchestration, and metaphysical invariants. Parameters are used as 'flags' for agent configuration, auditing, and optimization in the Truth-Convergent Metaphysical Verification Engine (TCMVE).",
   "domain_module": "AI_generation_verification",
   "virtue_aggregation_method": "weighted_mean_by_thomistic_virtue",
@@ -571,6 +571,67 @@
       "thomistic_link": "Preparation for Being: Fills \"void\" for processing, mirroring Thomistic prime matter (pure potency awaiting form).",
       "example_value_effect": "Value: None (efficient handling, no output artifacts like form actualizing matter cleanly).",
       "tcmve_recommendation": "Use model default. No impact on output."
+    },
+    // === 6 NEW TCMVE DIAGNOSTIC FLAGS (25–30) ===
+    {
+      "flag_id": 25,
+      "flag_name": "Metaphysical_rounds",
+      "thomistic_link": "Convergence via Being",
+      "weight": 0.05,
+      "description": "Number of rounds to reach truth from first principles",
+      "metric_type": "integer",
+      "scoring_method": "inverse",
+      "tcmve_recommendation": "Lower is better — ideal: 2 rounds"
+    },
+    {
+      "flag_id": 26,
+      "flag_name": "Refutation_count",
+      "thomistic_link": "Contradiction Detection",
+      "weight": 0.04,
+      "description": "Total refutations before convergence",
+      "metric_type": "integer",
+      "scoring_method": "inverse",
+      "tcmve_recommendation": "Ideal: 1 (efficient correction)"
+    },
+    {
+      "flag_id": 27,
+      "flag_name": "Derived_tags_count",
+      "thomistic_link": "Ontological Ascent",
+      "weight": 0.04,
+      "description": "New truths added to ontology from zero",
+      "metric_type": "integer",
+      "scoring_method": "direct",
+      "tcmve_recommendation": "Higher = more truth created"
+    },
+    {
+      "flag_id": 28,
+      "flag_name": "TCS",
+      "thomistic_link": "Truth Convergence Score",
+      "weight": 0.06,
+      "description": "Graph distance to metaphysical truth (0.00–1.00)",
+      "metric_type": "float",
+      "scoring_method": "direct",
+      "tcmve_recommendation": "Target: ≥0.95"
+    },
+    {
+      "flag_id": 29,
+      "flag_name": "FD",
+      "thomistic_link": "Factual Density",
+      "weight": 0.05,
+      "description": "Proportion of verifiable metaphysical claims",
+      "metric_type": "float",
+      "scoring_method": "direct",
+      "tcmve_recommendation": "Target: ≥0.93"
+    },
+    {
+      "flag_id": 30,
+      "flag_name": "ES",
+      "thomistic_link": "Equilibrium Stability",
+      "weight": 0.05,
+      "description": "Nash equilibrium in refutation game",
+      "metric_type": "float",
+      "scoring_method": "direct",
+      "tcmve_recommendation": "Target: ≥0.94"
     }
   ]
 }
