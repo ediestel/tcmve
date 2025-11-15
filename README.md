@@ -41,13 +41,14 @@ python tcmve_crossllm.py
 See main.tex — IEEE submission ready.
 
 ## Files
-File,Purpose
-tcmve.py,Run this — full engine
-tlpo_tcmve.json,30 TLPO flags
-tlpo_markup_schema_v1.2.xml,XML validation
-tcmve_system.txt,Metaphysical prompt
-ontology.txt,Zero-domain (empty)
-results/*.xml,Auto-saved diagnostics
+| File | Purpose |
+|--------|-------|
+| tcmve.py | Run this — full engine |
+| tlpo_tcmve.json | 30 TLPO flags |
+| tlpo_markup_schema_v1.2.xml | XML validation |
+| tcmve_system.txt | Metaphysical prompt |
+| ontology.txt,Zero-domain (empty) |
+| results/*.xml | Auto-saved diagnostics |
 
 ## Output
 
