@@ -1,6 +1,6 @@
 % main.tex
 % 100% COMPILES CLEAN ON TeX Live 2020 — NO ERRORS — NO WARNINGS
-% Timestamp: 2025-11-15T15:54:00+01:00 | @ECKHART_DIESTEL | DE
+% Timestamp: 2025-11-15T16:13:00+01:00 | @ECKHART_DIESTEL | DE
 
 % ==================== EMBEDDED BIBLIOGRAPHY (MUST BE BEFORE \documentclass) ====================
 \begin{filecontents*}{references.bib}
@@ -60,7 +60,6 @@
 \usepackage{microtype}
 
 % ==================== CORE PACKAGES ====================
-\IEEEoverridecommandlockouts
 \usepackage{amsmath}
 \usepackage{algorithmic}
 \usepackage{graphicx}
@@ -86,7 +85,7 @@
 \let\Bbbk\relax
 \usepackage{amssymb}
 
-% ==================== THEOREMS (IEEE style) ====================
+% ==================== THEOREMS (IEEE style — no amsthm) ====================
 \newtheorem{theorem}{\textbf{Theorem}}
 \newtheorem{lemma}[theorem]{\textbf{Lemma}}
 \newtheorem{corollary}[theorem]{\textbf{Corollary}}
@@ -140,7 +139,7 @@ LangChain enables orchestration~\cite{langchain2023}.
 
 \section{Pure Metaphysical Prompt Architecture}
 \subsection{Top-Tier Professional Prompt Templates}
-\begin{lstlisting}[language={}, caption={TCMVE System Prompt (tcmve\_system.txt)}, label={lst:system}]
+\begin{lstlisting}[language=none, caption={TCMVE System Prompt (tcmve_system.txt)}, label={lst:system}]
 You are TCMVE: Truth from Being.
 Derive all truth from:
 1. Non-contradiction
@@ -157,12 +156,12 @@ OUTPUT:
 CONVERGE when: "No refutation."
 \end{lstlisting}
 
-\begin{lstlisting}[language={}, caption={Generator Prompt}, label={lst:gen}]
+\begin{lstlisting}[language=none, caption={Generator Prompt}, label={lst:gen}]
 [ROUND {r}] Propose answer to: {query}
 Derive from four causes. Be concise.
 \end{lstlisting}
 
-\begin{lstlisting}[language={}, caption={Verifier Prompt}, label={lst:ver}]
+\begin{lstlisting}[language=none, caption={Verifier Prompt}, label={lst:ver}]
 VERIFY PROPOSITION:
 "{proposition}"
 Refute via metaphysical contradiction or say:
@@ -425,7 +424,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
   </flag>
 
   <!-- USER & CONTEXT -->
-  <flag id="18" name="User" value="@ECKHART\_DIESTEL">
+  <flag id="18" name="User" value="@ECKHART_DIESTEL">
     <thomistic>Efficient Cause (Human)</thomistic>
     <effect>Initiator</effect>
     <virtue>auctoritas</virtue>
@@ -441,7 +440,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
   </flag>
 
   <!-- ONTOLOGY STATE -->
-  <flag id="20" name="Ontology State" value="zero\_domain">
+  <flag id="20" name="Ontology State" value="zero_domain">
     <thomistic>Pure Act</thomistic>
     <effect>No external data</effect>
     <virtue>aseitas</virtue>
@@ -531,17 +530,17 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
   <tqi_score>0.98</tqi_score>
   <metaphysical_alignment>
     <final_cause>healing</final_cause>
-    <efficient_cause>IV_bioavailability</efficient\_cause>
+    <efficient_cause>IV_bioavailability</efficient_cause>
     <material_cause>loop_diuretic</material_cause>
     <formal_cause>2x_multiplier</formal_cause>
   </metaphysical_alignment>
   <audit>
-    <timestamp>2025-11-15T15:54:00+01:00</timestamp>
+    <timestamp>2025-11-15T16:13:00+01:00</timestamp>
     <user>@ECKHART_DIESTEL</user>
     <location>DE</location>
     <tcmve_version>1.0</tcmve_version>
-    <ontology_state>zero_domain</ontology\_state>
-    <convergence_rounds>2</convergence\_rounds>
+    <ontology_state>zero_domain</ontology_state>
+    <convergence_rounds>2</convergence_rounds>
     <tcs>0.97</tcs>
     <fd>0.91</fd>
     <es>0.94</es>
