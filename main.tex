@@ -1,6 +1,6 @@
 % main.tex
 % 100% COMPILES ON TeX Live 2020 — NO ERRORS — NO EXTERNAL FILES
-% Updated: 2025-11-15T15:39:00+01:00 | @ECKHART_DIESTEL | DE
+% Timestamp: 2025-11-15T15:42:00+01:00 | @ECKHART_DIESTEL | DE
 
 \documentclass[conference,letterpaper,10pt]{IEEEtran}
 \IEEEoverridecommandlockouts
@@ -10,13 +10,13 @@
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{newtxtext}
-\usepackage{newtxmath}          % Safe default — no varqu/varbb
+\usepackage{newtxmath}
 \usepackage{microtype}
 
 % ==================== CORE PACKAGES ====================
 \usepackage{cite}
 \usepackage{amsmath}
-\usepackage{amsthm}             % Load amsthm BEFORE amssymb to avoid \openbox clash
+% DO NOT LOAD amsthm — IEEEtran already defines \proof and \qedsymbol
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
@@ -38,15 +38,15 @@
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{appendix}
 
-% ==================== AMS SYMBOLS (AFTER amsthm) ====================
+% ==================== AMS SYMBOLS (after all others) ====================
 \usepackage{amssymb}
 
-% ==================== THEOREMS ====================
-\newtheorem{theorem}{Theorem}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{definition}[theorem]{Definition}
+% ==================== THEOREMS (IEEE style — no amsthm) ====================
+\newtheorem{theorem}{\textbf{Theorem}}
+\newtheorem{lemma}[theorem]{\textbf{Lemma}}
+\newtheorem{corollary}[theorem]{\textbf{Corollary}}
+\newtheorem{proposition}[theorem]{\textbf{Proposition}}
+\newtheorem{definition}[theorem]{\textbf{\textbf{Definition}}}
 
 % ==================== LISTINGS STYLE ====================
 \lstset{
@@ -537,7 +537,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
     <formal_cause>2x_multiplier</formal_cause>
   </metaphysical_alignment>
   <audit>
-    <timestamp>2025-11-15T15:39:00+01:00</timestamp>
+    <timestamp>2025-11-15T15:42:00+01:00</timestamp>
     <user>@ECKHART_DIESTEL</user>
     <location>DE</location>
     <tcmve_version>1.0</tcmve_version>
