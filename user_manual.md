@@ -65,6 +65,22 @@ source .venv/bin/activate  # Linux/macOS
 # .venv\Scripts\activate   # Windows
 ```
 
+#### **Now with installer script**
+
+# Development install
+
+```bash
+pip install -e .
+```
+
+# Run via CLI
+tcmve
+
+Commit
+bashgit add setup.py MANIFEST.in
+git commit -m "Add setup.py + MANIFEST.in — pip install -e . ready"
+git push origin main
+
 #### **Step 3: Install Dependencies**
 ```bash
 pip install -r requirements.txt
