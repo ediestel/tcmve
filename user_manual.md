@@ -46,7 +46,7 @@ Benefits:
 
 #### **GitHub Repo**
 Clone from: `https://github.com/anonymous/tcmve` (hypothetical; create your own).  
-Includes: `main.tex`, `tcmve.py`, `tcmve_system.txt`, `ontology.json`, `references.bib`.
+Includes: `main.tex`, `tcmve.py`, `tcmve_system.txt`, `tlco_tcmve.json`, `requirements.txt`, `references.bib`.
 
 ---
 
