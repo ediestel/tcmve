@@ -1,0 +1,11 @@
+# MANIFEST.in
+include README.md
+include LICENSE
+include tcmve_system.txt
+include ontology.txt
+include tlpo_tcmve.json
+include tlpo_markup_schema_v1.2.xml
+recursive-include demos *.py *.sh
+recursive-include results *.xml *.jsonl
+include main.tex
+include references.bib
