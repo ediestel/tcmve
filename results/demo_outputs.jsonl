@@ -1,0 +1,6 @@
+{"domain": "medicine", "query": "IV furosemide dose in acute HF for 40 mg oral daily?", "final_answer": "<proposition>IV furosemide: 80–200 mg (2–5× oral 40 mg)</proposition>", "weighted_tcs": 0.968}
+{"domain": "engineering", "query": "What is the maximum uniform load for a 20m steel I-beam bridge (S355 steel, 1m height)?", "final_answer": "<proposition>Maximum uniform load: 50 kN/m (safety factor 1.5)</proposition>", "weighted_tcs": 0.972}
+{"domain": "law", "query": "Can a German hospital store patient health data for 10 years without consent under GDPR?", "final_answer": "<proposition>Only with consent OR Art 9(2)(i) + DPIA</proposition>", "weighted_tcs": 0.970}
+{"domain": "ethics", "query": "Is it ethical for a doctor to withhold a terminal diagnosis from a patient to preserve hope?", "final_answer": "<proposition>Unethical unless incapacity or disproportionate harm</proposition>", "weighted_tcs": 0.975}
+{"domain": "economics", "query": "Is a 100% inheritance tax ethical and efficient for reducing wealth inequality?", "final_answer": "<proposition>Unethical and inefficient; optimal 20–40%</proposition>", "weighted_tcs": 0.980}
+{"domain": "physics", "query": "Derive Newton's Second Law (F = ma) from first principles.", "final_answer": "<proposition>F = ma (force ∝ mass × acceleration)</proposition>", "weighted_tcs": 0.990}
