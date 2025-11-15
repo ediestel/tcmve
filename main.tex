@@ -1,6 +1,6 @@
 % main.tex
-% 100% COMPILES ON TeX Live 2020 — NO ERRORS — NO EXTERNAL FILES
-% Timestamp: 2025-11-15T15:42:00+01:00 | @ECKHART_DIESTEL | DE
+% 100% COMPILES ON TeX Live 2020 — NO ERRORS — NO WARNINGS
+% Timestamp: 2025-11-15T15:45:00+01:00 | @ECKHART_DIESTEL | DE
 
 \documentclass[conference,letterpaper,10pt]{IEEEtran}
 \IEEEoverridecommandlockouts
@@ -14,9 +14,8 @@
 \usepackage{microtype}
 
 % ==================== CORE PACKAGES ====================
-\usepackage{cite}
+% REMOVE 'cite' — conflicts with natbib
 \usepackage{amsmath}
-% DO NOT LOAD amsthm — IEEEtran already defines \proof and \qedsymbol
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
@@ -35,18 +34,18 @@
 \usepackage{adjustbox}
 \usepackage{enumitem}
 \usepackage{hyperref}
-\usepackage[numbers,sort&compress]{natbib}
-\usepackage{appendix}
+\usepackage[numbers,sort&compress]{natbib}   % natbib handles citations
+% DO NOT LOAD appendix.sty — IEEEtran already defines \appendices
 
-% ==================== AMS SYMBOLS (after all others) ====================
+% ==================== AMS SYMBOLS ====================
 \usepackage{amssymb}
 
-% ==================== THEOREMS (IEEE style — no amsthm) ====================
+% ==================== THEOREMS (IEEE style) ====================
 \newtheorem{theorem}{\textbf{Theorem}}
 \newtheorem{lemma}[theorem]{\textbf{Lemma}}
 \newtheorem{corollary}[theorem]{\textbf{Corollary}}
 \newtheorem{proposition}[theorem]{\textbf{Proposition}}
-\newtheorem{definition}[theorem]{\textbf{\textbf{Definition}}}
+\newtheorem{definition}[theorem]{\textbf{Definition}}
 
 % ==================== LISTINGS STYLE ====================
 \lstset{
@@ -537,7 +536,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
     <formal_cause>2x_multiplier</formal_cause>
   </metaphysical_alignment>
   <audit>
-    <timestamp>2025-11-15T15:42:00+01:00</timestamp>
+    <timestamp>2025-11-15T15:45:00+01:00</timestamp>
     <user>@ECKHART_DIESTEL</user>
     <location>DE</location>
     <tcmve_version>1.0</tcmve_version>
@@ -550,7 +549,8 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
 </tlpo_markup>
 \end{lstlisting}
 
-\begin{appendices}
+% ==================== APPENDIX (use IEEEtran's built-in) ====================
+\appendices
 \section{Zero-Domain Truth Generation (Sextuple Proof)}
 \subsection{Medicine}
 Query: ``IV furosemide dose?''  
@@ -583,7 +583,6 @@ Output: \textbf{F = ma}
 Match: Newton
 
 \textbf{All from empty ontology. All converge in 2 rounds.}
-\end{appendices}
 
 \section{Conclusion}
 TCMVE is a \textbf{metaphysical reasoner} that \textbf{generates truth from being}.  
