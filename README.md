@@ -9,11 +9,26 @@
 
 ## Quick Start
 ```bash
-git clone https://github.com/ECKHART_DIESTEL/tcmve.git
+# 1. Clone repo
+git clone https://github.com/ediestel/tcmve.git
 cd tcmve
-python -m venv .venv && source .venv/bin/activate
+
+# 2. Create virtual env
+python -m venv .venv
+source .venv/bin/activate  # Linux/macOS
+# .venv\Scripts\activate   # Windows
+
+# 3. Install deps
 pip install langchain-openai langchain-anthropic langchain-groq python-dotenv
-cp .env.example .env  # Add API keys
+
+# 4. Add API keys → .env
+cat > .env << EOF
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+GROQ_API_KEY=gsk-...
+EOF
+
+# 5. Run demo
 python tcmve_crossllm.py
 ```
 ## Paper
