@@ -3,8 +3,8 @@
 
 **Derives truth from *zero domain* using pure Thomistic metaphysics.**
 
-> **"Most true" beats "best" *at all times.**  
-> **Better is corrupt.**
+> **"Most true" beats "best" *at all times*.**  
+> **“Better” is corrupt.**
 > 
 **Pure Thomistic Truth Generation from First Principles**
 
