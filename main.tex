@@ -139,7 +139,7 @@ LangChain enables orchestration~\cite{langchain2023}.
 
 \section{Pure Metaphysical Prompt Architecture}
 \subsection{Top-Tier Professional Prompt Templates}
-\begin{lstlisting}[language=none, caption={TCMVE System Prompt (tcmve\_system.txt)}, label={lst:system}]
+\begin{lstlisting}[language={}, caption={TCMVE System Prompt (tcmve\_system.txt)}, label={lst:system}]
 You are TCMVE: Truth from Being.
 Derive all truth from:
 1. Non-contradiction
@@ -156,12 +156,12 @@ OUTPUT:
 CONVERGE when: "No refutation."
 \end{lstlisting}
 
-\begin{lstlisting}[language=none, caption={Generator Prompt}, label={lst:gen}]
+\begin{lstlisting}[language={}, caption={Generator Prompt}, label={lst:gen}]
 [ROUND {r}] Propose answer to: {query}
 Derive from four causes. Be concise.
 \end{lstlisting}
 
-\begin{lstlisting}[language=none, caption={Verifier Prompt}, label={lst:ver}]
+\begin{lstlisting}[language={}, caption={Verifier Prompt}, label={lst:ver}]
 VERIFY PROPOSITION:
 "{proposition}"
 Refute via metaphysical contradiction or say:
