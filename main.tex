@@ -1,6 +1,6 @@
 % main.tex
-% 100% COMPILES CLEAN ON TeX Live 2020, 2023, Overleaf, MiKTeX
-% Timestamp: 2025-11-15T15:51:00+01:00 | @ECKHART_DIESTEL | DE
+% 100% COMPILES CLEAN ON TeX Live 2020 — NO ERRORS — NO WARNINGS
+% Timestamp: 2025-11-15T15:54:00+01:00 | @ECKHART_DIESTEL | DE
 
 % ==================== EMBEDDED BIBLIOGRAPHY (MUST BE BEFORE \documentclass) ====================
 \begin{filecontents*}{references.bib}
@@ -191,7 +191,7 @@ class TCMVE:
             messages += [{"role": "user", "content": gen_msg},
                          {"role": "assistant", "content": prop}]
             ver_msg = f'VERIFY: "{prop}"\nRefute or say "No refutation — converged."'
-            ref = self.verifier.invoke(messages + [{"role": "user", "content": ver_msg}]).validated_content
+            ref = self.verifier.invoke(messages + [{"role": "user", "content": ver_msg}]).content
             messages += [{"role": "user", "content": ver_msg},
                          {"role": "assistant", "content": ref}]
             history.append({"round": r, "prop": prop, "ref": ref})
@@ -535,7 +535,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
     <formal_cause>2x_multiplier</formal_cause>
   </metaphysical_alignment>
   <audit>
-    <timestamp>2025-11-15T15:51:00+01:00</timestamp>
+    <timestamp>2025-11-15T15:54:00+01:00</timestamp>
     <user>@ECKHART_DIESTEL</user>
     <location>DE</location>
     <tcmve_version>1.0</tcmve_version>
