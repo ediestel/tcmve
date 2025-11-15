@@ -40,6 +40,34 @@ python tcmve_crossllm.py
 ## Paper
 See main.tex — IEEE submission ready.
 
+## Files
+File,Purpose
+tcmve.py,Run this — full engine
+tlpo_tcmve.json,30 TLPO flags
+tlpo_markup_schema_v1.2.xml,XML validation
+tcmve_system.txt,Metaphysical prompt
+ontology.txt,Zero-domain (empty)
+results/*.xml,Auto-saved diagnostics
+
+## Output
+
+<tlpo_markup version="1.2" tcmve_mode="full_diagnostic">
+  <query>...</query>
+  <proposition>...</proposition>
+  <!-- 30 <flag> with generator/verifier/arbiter -->
+  <tqi_weighted>0.978</tqi_weighted>
+  <tcs_weighted>0.982</tcs_weighted>
+  <audit>
+    <timestamp>2025-11-15T13:32:00+01:00</timestamp>
+    <user>@ECKHART_DIESTEL</user>
+    <location>DE</location>
+  </audit>
+</tlpo_markup>
+
+### Validate
+
+ xmllint --schema tlpo_markup_schema_v1.2.xml results/*.xml --noout
+ 
 ## TLPO
 30-flag diagnostic markup for transparency.
 
