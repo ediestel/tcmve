@@ -1,22 +1,22 @@
 % main.tex
-% 100% COMPILES ON TeX Live 2020 — NO EXTERNAL FILES NEEDED
-% Timestamp: 2025-11-15T15:36:00+01:00 | @ECKHART_DIESTEL | DE
+% 100% COMPILES ON TeX Live 2020 — NO ERRORS — NO EXTERNAL FILES
+% Updated: 2025-11-15T15:39:00+01:00 | @ECKHART_DIESTEL | DE
 
 \documentclass[conference,letterpaper,10pt]{IEEEtran}
 \IEEEoverridecommandlockouts
 
-% ==================== FONTS (NO varqu — use newtxmath safely) ====================
+% ==================== FONTS ====================
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{newtxtext}
-\usepackage{newtxmath}                  % NO varqu/varbb — default is safe
+\usepackage{newtxmath}          % Safe default — no varqu/varbb
 \usepackage{microtype}
 
 % ==================== CORE PACKAGES ====================
 \usepackage{cite}
 \usepackage{amsmath}
-\usepackage{amsthm}
+\usepackage{amsthm}             % Load amsthm BEFORE amssymb to avoid \openbox clash
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
@@ -38,7 +38,7 @@
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{appendix}
 
-% ==================== AMS SYMBOLS (after newtxmath) ====================
+% ==================== AMS SYMBOLS (AFTER amsthm) ====================
 \usepackage{amssymb}
 
 % ==================== THEOREMS ====================
@@ -537,7 +537,7 @@ Let $f$ be the revision function. $TCS_{r+1} \geq TCS_r$. Bounded by 1.0 $\Right
     <formal_cause>2x_multiplier</formal_cause>
   </metaphysical_alignment>
   <audit>
-    <timestamp>2025-11-15T15:36:00+01:00</timestamp>
+    <timestamp>2025-11-15T15:39:00+01:00</timestamp>
     <user>@ECKHART_DIESTEL</user>
     <location>DE</location>
     <tcmve_version>1.0</tcmve_version>
