@@ -13,7 +13,7 @@
 - Truth from act/potency and four causes  
 
 ## How to:
-Below is a **step-by-step clarification** of the snippet you posted.  
+Below is a **step-by-step clarification**.  
 It shows two ways to get the **`tcmve`** tool running:
 
 1. **A quick “editable/development” install** (for people who already have the repo cloned).  
