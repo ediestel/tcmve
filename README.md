@@ -8,6 +8,7 @@
 **Practical Implication:**  
 TCMVE evaluates LLM outputs not by fluency, speed, or popularity 
 — but by **convergence toward metaphysical truth** grounded in Thomistic first principles. 
+- TCMVE **automatically rewrites prompts** using Thomistic metaphysical constraints (act/potency, essence/existence, causality) before submission to LLMs — then ranks outputs by **convergence to being**, not fluency.
 Use it to:
 - Detect subtle errors in reasoning across models
 - Rank responses by ontological coherence
