@@ -6,7 +6,9 @@
 *Ab initio, secundum metaphysicam thomisticam.*
 
 **Practical Implication:**  
-TCMVE evaluates LLM outputs not by fluency, speed, or popularity — but by **convergence toward metaphysical truth** grounded in Thomistic first principles. Use it to:
+TCMVE evaluates LLM outputs not by fluency, speed, or popularity 
+— but by **convergence toward metaphysical truth** grounded in Thomistic first principles. 
+Use it to:
 - Detect subtle errors in reasoning across models
 - Rank responses by ontological coherence
 - Build AI systems that prioritize *being* over *seeming*
