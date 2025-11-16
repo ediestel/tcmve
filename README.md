@@ -1,9 +1,11 @@
 # TCMVE — Truth-Convergent Metaphysical Verification Engine
 
+*"Most true" beats "best" *at all times*.* 
+
 **Truth Generation from First Principles**
 **Derives truth from *zero domain* using Thomistic metaphysics.**
 
-> **"Most true" beats "best" *at all times*.**  
+ 
 > 
 - No domain ontology  
 - No external citations  
