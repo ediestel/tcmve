@@ -26,7 +26,6 @@ I’ll break it down, explain what each line does, and point out a few gotchas.
 ## 1. Editable / Development Install  (if you already have the code)
 
 ```bash
-# Now with installer script
 # Development install
 pip install -e .
 ```
