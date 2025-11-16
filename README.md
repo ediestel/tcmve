@@ -3,7 +3,8 @@
 *"Most true" beats "best" *at all times*.* 
 
 **Truth Generation from First Principles**
-***Ab initio, secundum metaphysicam thomisticam.**
+
+**Ab initio, secundum metaphysicam thomisticam.**
 
  
 > 
