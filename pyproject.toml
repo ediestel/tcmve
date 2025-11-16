@@ -1,7 +1,6 @@
 # pyproject.toml
 # TCMVE — Truth from Being
-# @ECKHART_DIESTEL | DE | 2025-11-15 02:50 PM CET
-# pip install tcmve
+# @ECKHART_DIESTEL | DE | 2025-11-16
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
@@ -12,9 +11,7 @@ name = "tcmve"
 version = "1.0.0"
 description = "Truth from Being — Zero-domain LLM verification via Thomistic metaphysics"
 readme = "README.md"
-authors = [
-    { name = "@ECKHART_DIESTEL", email = "eckhart.diestel@example.com" }
-]
+authors = [{ name = "@ECKHART_DIESTEL", email = "eckhart.diestel@example.com" }]
 license = { text = "MIT" }
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -26,10 +23,10 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
-    "Topic :: Scientific/Engineering :: :: LLM :: Artificial Intelligence",
-    "Topic :: Metaphysics :: Religion :: Philosophy"
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Religion :: Philosophy"
 ]
-keywords = ["llm","hallucination", "drift", "verification", "thomism", "metaphysics", "truth", "convergence", "ai-safety"]
+keywords = ["llm", "hallucination", "drift", "verification", "thomism", "metaphysics", "truth", "convergence", "ai-safety"]
 requires-python = ">=3.10"
 dependencies = [
     "langchain-openai>=0.1.0",
@@ -39,15 +36,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=7.0",
-    "black>=23.0",
-    "flake8>=6.0"
-]
-paper = [
-    "matplotlib>=3.7",
-    "pandas>=2.0"
-]
+dev = ["pytest>=7.0", "black>=23.0", "flake8>=6.0"]
+paper = ["matplotlib>=3.7", "pandas>=2.0"]
 
 [project.urls]
 Homepage = "https://github.com/ediestel/tcmve"
@@ -59,16 +49,19 @@ Paper = "https://github.com/ediestel/tcmve/blob/main/main.pdf"
 [project.scripts]
 tcmve = "tcmve:main"
 
+# === GENERIC ROOT LAYOUT (WORKS ON ANY MACHINE) ===
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["src"]
+include = ["src"]
 
 [tool.setuptools.package-data]
-tcmve = [
+"tcmve" = [
+    "tcmve.py",
     "tcmve_system.txt",
     "ontology.txt",
     "tlpo_tcmve.json",
     "tlpo_markup_schema_v1.2.xml",
-    "main.tex",
+    "main.pdf",
     "references.bib"
 ]
 "tcmve.demos" = ["*.py", "*.sh"]

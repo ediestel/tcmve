@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tlpo_markup version="1.2" tcmve_mode="full_diagnostic" tcmve_version="1.0.0">
+  <query>Deus est ens a se</query>
+  <proposition>&lt;proposition&gt;Deus est ens a se signifies that God is being from Himself, existing by His own essence without dependence on anything else.&lt;/proposition&gt;
+&lt;causes&gt;Final: The ultimate purpose of God&#x27;s existence is to be the source and sustainer of all other beings. | Efficient: God exists through His own nature, not caused by another. | Material: As pure act, God has no material cause; He embodies complete actuality with no potentiality. | Formal: God&#x27;s essence as necessary being defines Him as self-existent.&lt;/causes&gt;
+&lt;derived_tag&gt;&lt;new_truth&gt;The concept of Deus est ens a se aligns with Thomistic metaphysics where God represents pure act (actus purus), devoid of potency, embodying absolute simplicity and necessity.&lt;/new_truth&gt;&lt;/derived_tag&gt;</proposition>
+  <flag id="1" name="Temperature">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Potency vs. Act: High temperature embodies potency (pure potential for varied beings/responses), while low embodies act (realization of the most likely, determinate path).</thomistic>
+  </flag>
+  <flag id="2" name="Logit_bias">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Final Cause: Directs generation toward a telos, akin to how final causes guide beings to their natural end.</thomistic>
+  </flag>
+  <flag id="3" name="Do_sample">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>0.95</arbiter>
+    <thomistic>Act-Potency Toggle: False = pure act; True = engages potency, mirroring Thomistic prime act actualizing pure potency.</thomistic>
+  </flag>
+  <flag id="4" name="Renormalize_logits">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Stability of Probabilities: Ensures consistent &#x27;measures&#x27; of potency, akin to Thomistic immutable divine essence stabilizing created beings.</thomistic>
+  </flag>
+  <flag id="5" name="Guidance_scale">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Directed Potency: Scales adherence to essence, like Thomistic divine guidance directing creatures to their end.</thomistic>
+  </flag>
+  <flag id="6" name="Top_p">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>0.9</arbiter>
+    <thomistic>Limitation of Potency: Restricts infinite potential, mirroring Thomistic matter-form hylomorphism.</thomistic>
+  </flag>
+  <flag id="7" name="Top_k">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Accidents Modifying Substance: Selects from a fixed set of attributes (top tokens), like accidents inhering in a substance without changing its core essence (prompt).</thomistic>
+  </flag>
+  <flag id="8" name="Typical_p">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>0.95</arbiter>
+    <thomistic>Typical Participation: Selects &quot;common&quot; participations in being, per Thomistic analogy (beings participate typically in higher essences).</thomistic>
+  </flag>
+  <flag id="9" name="Epsilon_cutoff">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Threshold of Potency: Cuts off negligible potentials, analogous to Thomistic minimal essence required for existence (avoids &quot;non-beings&quot;).</thomistic>
+  </flag>
+  <flag id="10" name="Min_p">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Relative Limitation of Potency: Sets a minimum relative to the highest act, mirroring Thomistic proportional participation in divine perfection.</thomistic>
+  </flag>
+  <flag id="11" name="Repetition_penalty">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>0.95</arbiter>
+    <thomistic>Unity of Being: Prevents redundant multiplicity, per Thomistic principle that essence is one and indivisible (avoids &quot;duplicated&quot; beings without purpose).</thomistic>
+  </flag>
+  <flag id="12" name="Frequency_penalty">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Moderation of Multiplicity: Tempers over-frequent &quot;participations&quot; in being, akin to Thomistic analogy where beings participate variably in divine essence without excess.</thomistic>
+  </flag>
+  <flag id="13" name="Presence_penalty">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Promotion of Novel Existence: Encourages new &quot;beings&quot; (tokens), linking to Thomistic creation ex nihilo (new existences from potency).</thomistic>
+  </flag>
+  <flag id="14" name="No_repeat_ngram_size">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>0.9</arbiter>
+    <thomistic>Individuation of Phrases: Ensures distinct &quot;composites&quot; (n-grams), like Thomistic individuation of substances by matter.</thomistic>
+  </flag>
+  <flag id="15" name="Encoder_repetition_penalty">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Distinction from Material Cause: Penalizes repetitions from the input (material cause), ensuring the generated being is distinct and actualized anew.</thomistic>
+  </flag>
+  <flag id="16" name="Num_beams">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>0.95</arbiter>
+    <thomistic>Multiplicity of Beings: Higher values allow parallel &quot;participations&quot; in being (multiple paths), analogous to Thomistic hierarchy of beings (angels, humans) exploring essences diversely.</thomistic>
+  </flag>
+  <flag id="17" name="Early_stopping">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Prudent Actualization: Stops potency exploration when act is sufficiently realized, analogous to Thomistic virtue of prudence in directing causes to ends.</thomistic>
+  </flag>
+  <flag id="18" name="Length_penalty">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Proportion in Being: Adjusts the &quot;measure&quot; of existence, per Thomistic beauty/truth as proportion (balanced essences).</thomistic>
+  </flag>
+  <flag id="19" name="Diversity_penalty">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>0.95</arbiter>
+    <thomistic>Diversity in Creation: Imposes penalty to promote varied beings, akin to Thomistic plenitude of creation where God creates a multiplicity of distinct essences.</thomistic>
+  </flag>
+  <flag id="20" name="Num_return_sequences">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Plurality of Actualizations: Allows multiple realizations of potency, similar to Thomistic contemplation of possible essences.</thomistic>
+  </flag>
+  <flag id="21" name="Max_new_tokens">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Finite Existence: Bounds the extent of being, akin to Thomistic finite creatures (essence limits existence; only God is infinite).</thomistic>
+  </flag>
+  <flag id="22" name="Min_new_tokens">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>0.9</arbiter>
+    <thomistic>Minimal Essence: Guarantees a base level of existence, mirroring Thomistic minimal act required for a being&#x27;s realization.</thomistic>
+  </flag>
+  <flag id="23" name="Eos_token_id">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Telos of Existence: Marks the final end of being, analogous to Thomistic eschatology (ultimate purpose/completion of existence).</thomistic>
+  </flag>
+  <flag id="24" name="Pad_token_id">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>0.95</arbiter>
+    <thomistic>Preparation for Being: Fills &quot;void&quot; for processing, mirroring Thomistic prime matter (pure potency awaiting form).</thomistic>
+  </flag>
+  <flag id="25" name="Metaphysical_rounds">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Convergence via Being</thomistic>
+  </flag>
+  <flag id="26" name="Refutation_count">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Contradiction Detection</thomistic>
+  </flag>
+  <flag id="27" name="Derived_tags_count">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>0.95</arbiter>
+    <thomistic>Ontological Ascent</thomistic>
+  </flag>
+  <flag id="28" name="TCS">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Truth Convergence Score</thomistic>
+  </flag>
+  <flag id="29" name="FD">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Factual Density</thomistic>
+  </flag>
+  <flag id="30" name="ES">
+    <generator>N/A</generator>
+    <verifier>N/A</verifier>
+    <arbiter>1.0</arbiter>
+    <thomistic>Equilibrium Stability</thomistic>
+  </flag>
+  <tqi_weighted>0.291</tqi_weighted>
+  <tcs_weighted>0.294</tcs_weighted>
+  <audit>
+    <timestamp>2025-11-16T14:45:40</timestamp>
+    <user>@ECKHART_DIESTEL</user>
+    <location>DE</location>
+  </audit>
+</tlpo_markup>

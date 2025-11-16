@@ -572,7 +572,6 @@
       "example_value_effect": "Value: None (efficient handling, no output artifacts like form actualizing matter cleanly).",
       "tcmve_recommendation": "Use model default. No impact on output."
     },
-    // === 6 NEW TCMVE DIAGNOSTIC FLAGS (25–30) ===
     {
       "flag_id": 25,
       "flag_name": "Metaphysical_rounds",

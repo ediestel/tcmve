@@ -1,0 +1,2 @@
+[console_scripts]
+tcmve = tcmve:main

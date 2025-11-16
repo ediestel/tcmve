@@ -1,0 +1,17 @@
+pyproject.toml
+./src/__init__.py
+./src/setup.py
+./src/tcmve.py
+./src/tcmve_scoring.py
+./src/demos/economics_inheritance.py
+./src/demos/engineering_bridge.py
+./src/demos/ethics_diagnosis.py
+./src/demos/law_gdpr.py
+./src/demos/medicine_furosemide.py
+./src/demos/physics_f_ma.py
+tcmve.egg-info/PKG-INFO
+tcmve.egg-info/SOURCES.txt
+tcmve.egg-info/dependency_links.txt
+tcmve.egg-info/entry_points.txt
+tcmve.egg-info/requires.txt
+tcmve.egg-info/top_level.txt
