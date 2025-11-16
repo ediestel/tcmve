@@ -1,6 +1,6 @@
 # TCMVE — Truth-Convergent Metaphysical Verification Engine
 
-**"Most true" beats "best" — *at all times*.**
+**"Most true" beats "best" *at all times*.**
 
 **Truth Generation from First Principles**  
 *Ab initio, secundum metaphysicam thomisticam.*
