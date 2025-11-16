@@ -1,19 +1,22 @@
 # TCMVE — Truth-Convergent Metaphysical Verification Engine
 
-*"Most true" beats "best" *at all times*.* 
+**"Most true" beats "best" — *at all times*.**
 
-**Truth Generation from First Principles**
+**Truth Generation from First Principles**  
+*Ab initio, secundum metaphysicam thomisticam.*
 
-**Ab initio, secundum metaphysicam thomisticam.**
-
- 
+**Practical Implication:**  
+TCMVE evaluates LLM outputs not by fluency, speed, or popularity — but by **convergence toward metaphysical truth** grounded in Thomistic first principles. Use it to:
+- Detect subtle errors in reasoning across models
+- Rank responses by ontological coherence
+- Build AI systems that prioritize *being* over *seeming*
 > 
-- No domain ontology  
+- No domain ontology required  
 - No external citations  
 - No LLM parameter tuning  
 - Truth from act/potency and four causes  
 
-## How to:
+## How to set up:
 Below is a **step-by-step clarification**.  
 It shows two ways to get the **`tcmve`** tool running:
 
