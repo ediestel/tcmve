@@ -40,7 +40,9 @@ tcmve
 ```
 
 *Now you can just type `tcmve` in the terminal (any arguments the tool expects).*
-
+```bash
+tcmve "Explain quantum entanglement in 2 sentences."
+```
 ---
 
 ## 2. Commit & Push (only needed if you are the maintainer)
