@@ -97,7 +97,7 @@ EOF
 
 ```bash
 # 5. Run demo
-python tcmve_crossllm.py
+python tcmve.py
 ```
 
 *Executes the demo script that presumably uses the LLM wrappers and the keys from `.env`.*
@@ -114,7 +114,7 @@ git clone https://github.com/ediestel/tcmve.git && cd tcmve
 python -m venv .venv && source .venv/bin/activate   # (or .venv\Scripts\activate on Windows)
 pip install langchain-openai langchain-anthropic langchain-groq python-dotenv
 # create .env with your keys
-python tcmve_crossllm.py
+python tcmve.py
 ``` |
 
 ---
