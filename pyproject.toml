@@ -24,10 +24,12 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: Religion :: Philosophy"
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering :: :: LLM :: Artificial Intelligence",
+    "Topic :: Metaphysics :: Religion :: Philosophy"
 ]
-keywords = ["llm", "verification", "thomism", "metaphysics", "truth", "convergence", "ai-safety"]
+keywords = ["llm","hallucination", "drift", "verification", "thomism", "metaphysics", "truth", "convergence", "ai-safety"]
 requires-python = ">=3.10"
 dependencies = [
     "langchain-openai>=0.1.0",
