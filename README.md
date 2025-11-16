@@ -1,57 +1,133 @@
 # TCMVE — Truth-Convergent Metaphysical Verification Engine
-## Truth from Being
 
-**Derives truth from *zero domain* using pure Thomistic metaphysics.**
+**Truth Generation from First Principles**
+**Derives truth from *zero domain* using Thomistic metaphysics.**
 
 > **"Most true" beats "best" *at all times*.**  
-> **“Better” is corrupt.**
 > 
-**Pure Thomistic Truth Generation from First Principles**
-
 - No domain ontology  
 - No external citations  
 - No LLM parameter tuning  
 - Truth from act/potency and four causes  
 
-## Quick Start
+## How to:
+Below is a **step-by-step clarification** of the snippet you posted.  
+It shows two ways to get the **`tcmve`** tool running:
+
+1. **A quick “editable/development” install** (for people who already have the repo cloned).  
+2. **A full “from-scratch” workflow** (clone → venv → deps → env-file → demo).
+
+I’ll break it down, explain what each line does, and point out a few gotchas.
+
+---
+
+## 1. Editable / Development Install  (if you already have the code)
+
 ```bash
-
-# Now with  instaler script
+# Now with installer script
 # Development install
-
 pip install -e .
+```
 
+| Line | What it does |
+|------|--------------|
+| `pip install -e .` | Installs the current folder (`.`) as an **editable** Python package. The package name comes from `setup.py` (or `pyproject.toml` if you switched to it). After this, the command `tcmve` becomes available in your current environment because the script is placed on `$PATH`. |
+
+```bash
 # Run via CLI
 tcmve
+```
 
-Commit
-bashgit add setup.py MANIFEST.in
+*Now you can just type `tcmve` in the terminal (any arguments the tool expects).*
+
+---
+
+## 2. Commit & Push (only needed if you are the maintainer)
+
+```bash
+git add setup.py MANIFEST.in
 git commit -m "Add setup.py + MANIFEST.in — pip install -e . ready"
 git push origin main
+```
+
+*Adds the new packaging files, commits, and pushes to GitHub. Not needed for end-users.*
+
+---
+
+## 3. Full “Clone-and-Run” Workflow (for anyone starting fresh)
+
+```bash
 # 1. Clone repo
 git clone https://github.com/ediestel/tcmve.git
 cd tcmve
+```
 
+*Downloads the repo and enters the folder.*
+
+```bash
 # 2. Create virtual env
 python -m venv .venv
-source .venv/bin/activate  # Linux/macOS
-# .venv\Scripts\activate   # Windows
+source .venv/bin/activate   # Linux/macOS
+# .venv\Scripts\activate    # Windows
+```
 
+*Creates an isolated Python environment (`.venv`). Activate it so all subsequent `pip`/`python` commands use this env.*
+
+```bash
 # 3. Install deps
 pip install langchain-openai langchain-anthropic langchain-groq python-dotenv
+```
 
+*Installs the required third-party libraries.*
+
+```bash
 # 4. Add API keys → .env
 cat > .env << EOF
 OPENAI_API_KEY=sk-...
 ANTHROPIC_API_KEY=sk-ant-...
 GROQ_API_KEY=gsk-...
 EOF
+```
 
+*Creates a `.env` file in the project root and writes the three API keys.  
+**Replace the `...` with your real keys** (never commit this file!).*
+
+```bash
 # 5. Run demo
 python tcmve_crossllm.py
 ```
+
+*Executes the demo script that presumably uses the LLM wrappers and the keys from `.env`.*
+
+---
+
+## TL;DR – What you need to do
+
+| Goal | Minimal commands |
+|------|-------------------|
+| **You already cloned the repo** | `pip install -e .` → `tcmve …` |
+| **You are starting from zero** | ```bash
+git clone https://github.com/ediestel/tcmve.git && cd tcmve
+python -m venv .venv && source .venv/bin/activate   # (or .venv\Scripts\activate on Windows)
+pip install langchain-openai langchain-anthropic langchain-groq python-dotenv
+# create .env with your keys
+python tcmve_crossllm.py
+``` |
+
+---
+
+## Common Pitfalls & Tips
+
+1. **`.env` must be in the project root** (same folder where you run the script).  
+2. **Never commit `.env`** – add it to `.gitignore` if it isn’t already.  
+3. **Python version** – the repo likely expects ≥3.9 (LangChain). Use `python3 -m venv .venv` if `python` points to 2.x.  
+4. **Editable install needs `setup.py` (or `pyproject.toml`)** – the commit you saw added those files.  
+5. **Windows activation** – use `.\.venv\Scripts\activate` (backslashes).  
+
+---
+
 ## Paper
-See main.tex — IEEE submission ready.
+See main.pdf — IEEE submission ready.
 
 ## Files
 | File | Purpose |
@@ -98,8 +174,7 @@ See main.tex — IEEE submission ready.
 
 **Run all**: `./demos/run_all_demos.sh`  
 **Results**: `results/demo_outputs.jsonl`
-
-**ABIM MCQs**: 10/10 at Catholic institution  
+ 
 **Open-source MIT** | @ECKHART_DIESTEL | DE | 2025
 
 **Author** | @ECKHART_DIESTEL | DE | 2025
