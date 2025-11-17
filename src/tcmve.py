@@ -438,6 +438,25 @@ class TCMVE:
                 eIQ = biq + 400 * math.log(cycles + 1) * V
             final_answer = base
             
+                # === Build Result ONCE ===
+        result = {
+            "query": query,
+            "final_answer": final_answer,
+            "converged": converged,
+            "rounds": len(history),
+            "history": history,
+
+        }
+        
+        # === TLPO Scoring ===
+        tlpo_scores = self._evaluate_with_tlpo(final_answer, query)
+        metrics = self._compute_metrics(history)
+
+        result["tlpo_scores"] = tlpo_scores,
+        result["tlpo_markup"] = self._generate_tlpo_markup(tlpo_scores, final_answer, query),
+        result["metrics"] = metrics
+        
+       
         # === VICE CHECK
         if getattr(args, "vice_check", False):
             virtues = self.virtue_vectors["arbiter"]
@@ -451,10 +470,10 @@ class TCMVE:
 
             if any(v < 0.5 for v in [P, J, F, T, V_val, L, Ω]):
                 V = 0.0
-                logger.warning("Vice detected — V = 0.0")
+                logger.warning("Vice detected — V = 0.0 (eIQ gain blocked)")
             else:
                 V = (P * J * F * T * V_val * L * Ω) / 1000
-            result["V"] = V
+            result["V"] = round(V, 4)
             
         if getattr(args, "game", None):
             try:
@@ -469,28 +488,12 @@ class TCMVE:
                 logger.error(f"Game failed: {e}")
                 result["game_error"] = str(e)
             
-        # === TLPO Scoring ===
-        tlpo_scores = self._evaluate_with_tlpo(final_answer, query)
-        metrics = self._compute_metrics(history)
-
-        # === Build Result ONCE ===
-        result = {
-            "query": query,
-            "final_answer": final_answer,
-            "converged": converged,
-            "rounds": len(history),
-            "history": history,
-            "tlpo_scores": tlpo_scores,
-            "tlpo_markup": self._generate_tlpo_markup(tlpo_scores, final_answer, query),
-            "metrics": metrics,
-        }
-        
-
         # Add eIQ/TQI only if self-refine
         if eIQ is not None:
             result["eIQ"] = eIQ
             result["TQI"] = tqi
             result["eIQ_norm"] = round(eIQ / 5540, 2)  # ← Your max
+     
             
         # === Save XML ===
         safe_name = re.sub(r"[^a-zA-Z0-9_\-]+", "_", query[:60]) or "tcmve_output"
@@ -582,65 +585,62 @@ For each flag 1–30, output JSON:
         logger.error("No JSON object found in TLPO evaluation output.")
         return {}
 
-    # ------------------------------------------------------------------- #
-    # TLPO Markup XML Generation
-    # ------------------------------------------------------------------- #
+        # ------------------------------------------------------------------- #
+        # TLPO Markup XML Generation
+        # ------------------------------------------------------------------- #
     def _generate_tlpo_markup(
-        self, scores: dict, answer: str, query: str
-    ) -> str:
-        """
-        Generate a full XML TLPO diagnostic document:
+            self, scores: dict, answer: str, query: str
+        ) -> str:
+            flags_xml: List[str] = []
 
-        - 30 <flag> nodes, one per Thomistic flag
-        - Per-LLM scores (generator / verifier / arbiter)
-        - Weighted TQI and TCS
-        - Audit trail (timestamp, user, location)
-        """
-        flags_xml: List[str] = []
+            for i in range(1, TLPO_FLAGS + 1):
+                flag_def = next(
+                    (f for f in self.tlpo["flags"] if f.get("flag_id") == i),
+                    {"flag_name": f"Flag_{i}", "thomistic_link": "N/A"}
+                )
+                name = flag_def.get("flag_name", f"Flag_{i}")
+                thom = flag_def.get("thomistic_link", "N/A")
 
-        for i in range(1, TLPO_FLAGS + 1):
-            flag_def = next(
-                (f for f in self.tlpo["flags"] if f.get("flag_id") == i), {}
+                gen = scores.get("generator", {}).get("flag_scores", {}).get(str(i), "N/A")
+                ver = scores.get("verifier", {}).get("flag_scores", {}).get(str(i), "N/A")
+                arb = scores.get("arbiter", {}).get("flag_scores", {}).get(str(i), "N/A")
+
+                name_esc = html.escape(str(name), quote=True)
+                thom_esc = html.escape(str(thom), quote=True)
+
+                flags_xml.append(
+                    f'  <flag id="{i}" name="{name_esc}">\n'
+                    f'    <generator>{gen}</generator>\n'
+                    f'    <verifier>{ver}</verifier>\n'
+                    f'    <arbiter>{arb}</arbiter>\n'
+                    f'    <thomistic>{thom_esc}</thomistic>\n'
+                    f'  </flag>'
+                )
+
+            now = datetime.now().strftime("%Y-%m-%dT%H:%M:%S%z")
+            tqi_w = scores.get("weighted_tqi", 0.0)
+            tcs_w = scores.get("weighted_tcs", 0.0)
+
+            query_esc = html.escape(str(query), quote=True)
+            answer_esc = html.escape(str(answer), quote=True)
+
+            # FINAL — NO COMMA, NO BACKSLASH, 100% STR
+            markup = (
+                f'<tlpo_markup version="1.2" tcmve_mode="full_diagnostic">\n'
+                f'  <query>{query_esc}</query>\n'
+                f'  <proposition>{answer_esc}</proposition>\n'
+                + "\n".join(flags_xml) + "\n"
+                + f'  <tqi_weighted>{tqi_w}</tqi_weighted>\n'
+                + f'  <tcs_weighted>{tcs_w}</tcs_weighted>\n'
+                + f'  <audit>\n'
+                + f'    <timestamp>{now}</timestamp>\n'
+                + f'    <user>{USER_TAG}</user>\n'
+                + f'    <location>{USER_LOCATION}</location>\n'
+                + f'  </audit>\n'
+                + f'</tlpo_markup>'
             )
-            name = flag_def.get("flag_name", f"Flag_{i}")
-            thom = flag_def.get("thomistic_link", "N/A")
 
-            gen = scores.get("generator", {}).get("flag_scores", {}).get(str(i), "N/A")
-            ver = scores.get("verifier", {}).get("flag_scores", {}).get(str(i), "N/A")
-            arb = scores.get("arbiter", {}).get("flag_scores", {}).get(str(i), "N/A")
-
-            name_esc = html.escape(str(name), quote=True)
-            thom_esc = html.escape(str(thom), quote=True)
-
-            flags_xml.append(
-                f"""  <flag id="{i}" name="{name_esc}">
-    <generator>{gen}</generator>
-    <verifier>{ver}</verifier>
-    <arbiter>{arb}</arbiter>
-    <thomistic>{thom_esc}</thomistic>
-  </flag>"""
-            )
-
-        now = datetime.now().strftime("%Y-%m-%dT%H:%M:%S%z")
-        tqi_w = scores.get("weighted_tqi", 0.0)
-        tcs_w = scores.get("weighted_tcs", 0.0)
-
-        query_esc = html.escape(str(query), quote=True)
-        answer_esc = html.escape(str(answer), quote=True)
-
-        return f"""<tlpo_markup version="1.2" tcmve_mode="full_diagnostic">
-  <query>{query_esc}</query>
-  <proposition>{answer_esc}</proposition>
-{os.linesep.join(flags_xml)}
-  <tqi_weighted>{tqi_w}</tqi_weighted>
-  <tcs_weighted>{tcs_w}</tcs_weighted>
-  <audit>
-    <timestamp>{now}</timestamp>
-    <user>{USER_TAG}</user>
-    <location>{USER_LOCATION}</location>
-  </audit>
-</tlpo_markup>"""
-
+            return markup
     # ------------------------------------------------------------------- #
     # Cross-LLM Simple Metrics (from previous cross-LLM engine)
     # ------------------------------------------------------------------- #
@@ -701,15 +701,15 @@ def main() -> None:
     import sys
 
     parser = argparse.ArgumentParser(
-        description="TCMVE — Thomistic Cross-Model Verification Engine",
+        description="nTGT — Nash-Thomistic Game Theory Verification Engine (TCMVE)",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("query", nargs="?", help="Query to verify")
-    parser.add_argument("--max-rounds", type=int, default=5)
-    parser.add_argument("--demo", action="store_true")
-    parser.add_argument("--version", action="store_true")
-    parser.add_argument("--nash-mode", choices=['on', 'off', 'auto'], default="auto")
-    parser.add_argument("--virtue-mod", type=str, action="append")
+    parser.add_argument("--max-rounds", type=int, default=5, help="Max debate rounds")
+    parser.add_argument("--demo", action="store_true", help="Run demo")
+    parser.add_argument("--version", action="store_true", help="Show version")
+    parser.add_argument("--nash-mode", choices=['on', 'off', 'auto'], default="auto", help="Nash mode")
+    parser.add_argument("--virtue-mod", type=str, action="append", help="Virtue mod (role:param:value)")
     parser.add_argument("--eiq-level", type=int, default=10, help="Self-refine cycles (eIQ gain)")
     parser.add_argument("--vice-check", action="store_true", help="Enable vice calculation")
     parser.add_argument(
@@ -720,16 +720,25 @@ def main() -> None:
             "evolution",
             "regret_min",
             "shadow_play",
-            "multiplay",     # ← intentional spelling (your original)
+            "multiplay",
             "auction"
         ],
         help="Play Nash game (nTGT 2.0)"
-    )    
+    )
+    # === ARCHER-1.0 FLAGS ===
+    parser.add_argument("--self-refine", action="store_true", help="Enable self-refine")
+    parser.add_argument("--cycles", type=int, default=50, help="Self-refine cycles")
+    parser.add_argument("--simulated-persons", type=int, default=240, help="Number of simulated persons")
+    parser.add_argument("--biq-distribution", choices=["gaussian"], default="gaussian", help="bIQ distribution")
+    parser.add_argument("--mean-biq", type=float, default=100, help="Mean bIQ")
+    parser.add_argument("--sigma-biq", type=float, default=15, help="bIQ standard deviation")
+    parser.add_argument("--virtues-independent", action="store_true", help="Virtues independent of bIQ")
+    parser.add_argument("--output", default="archer_uncorrelated_240", help="Output filename")
+
     args = parser.parse_args()
 
-        
     if args.version:
-        print(f"tcmve {TCMVE_VERSION}")
+        print(f"nTGT {TCMVE_VERSION}")
         return
 
     virtue_mods = {}
@@ -742,11 +751,10 @@ def main() -> None:
     # === FIXED LOGIC ===
     if args.demo:
         query = "IV furosemide dose in acute HF for 40 mg oral daily?"
-        print("Running TCMVE DEMO...")
+        print("Running nTGT DEMO...")
     elif args.query:
         query = args.query
     elif not sys.stdin.isatty():
-        # STDIN has data → read it
         query = sys.stdin.read().strip()
         if not query:
             print("Error: Empty input from STDIN")
@@ -754,6 +762,9 @@ def main() -> None:
     else:
         print("Error: No query provided. Use --demo, positional arg, or pipe input.")
         return
+    # === END FIX ===
+
+    result = engine.run(query, args=args)  # ← PASS args to run()
     # === END FIX ===
 
     result = engine.run(query)
