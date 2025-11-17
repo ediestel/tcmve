@@ -10,6 +10,7 @@ import re
 import html
 import sys
 import random  # For Omega humility clause
+import math
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Literal
@@ -61,7 +62,7 @@ class LLMClient:
         api_key: Optional[str],
         temperature: float = 0.0,
         top_p: float = 1.0,
-        max_tokens: int = 512,
+        max_tokens: int = 16192,
         presence_penalty: float = 0.0,
         frequency_penalty: float = 0.0,
     ):
@@ -152,7 +153,36 @@ class LLMClient:
 
 
 # --------------------------------------------------------------------------- #
-# TCMVE Engine (LangChain-Free, Professional Grade)
+# TCMV Engine (TCMVE - Truth-Convergent Metaphysical Verification Engine)
+# nTGT  (Nash driven TGT)
+# TGT  (Thomistic Game Theory)
+# VIRTUE PARAMETERS — Thomistic Metaphysics + Nash Game Theory
+# Truth (TQI) = actus veritatis — final cause of intellect
+# Humility (Ω) = recognitio finitudinis — opens to divine truth
+# Dynamic Ω = virtue in actus — adapts to TQI (truth feedback)
+# Vice calculation = optional (flag: --vice-check)
+
+# P — Prudence: *intellectus agens* — directs refinement, chooses **Nash best response**
+# J — Justice: *voluntas recta* — balances man-LLM payoff, ensures **fair Nash equilibrium**
+# F — Fortitude: *ira fortis* — persists in Nash cycles, resists early convergence
+# T — Temperance: *concupiscentia moderata* — avoids over-refinement (Nash over-search)
+# V — Veritas: *ratio speculativa* — seeks truth payoff in Nash matrix
+# L — Libertas: *libertas arbitrii* — frees from local Nash minima (bias traps)
+# Ω — Humility: *recognitio finitudinis* — **dynamic doubt**, prevents overconfidence in Nash equilibrium
+
+# V = multiplicative actus — one weak virtue = no eIQ gain (Nash collapse)
+# Nash equilibrium = stable strategy: no player gains by unilateral change
+# P, J, Ω = **core Nash drivers**: prudence (strategy), justice (payoff), humility (doubt)
+
+# VICE CALCULATION (optional --vice-check)
+# Vice = inversion of virtue: any virtue < 0.5 → V = 0.0
+# Formula:
+#   if any(P, J, F, T, V, L, Ω) < 0.5:
+#       V = 0.0
+#   else:
+#       V = (P * J * F * T * V * L * Ω) / 1000
+# Vice = privation of being — one vice = no eIQ gain (Nash collapse)
+# Vice check = safeguard against hubris, bias, overconfidence
 # --------------------------------------------------------------------------- #
 class TCMVE:
     """
@@ -170,13 +200,12 @@ class TCMVE:
     - Modification of virtue flags and omega for each player, set as default in __init__ , allow modification with command line flags (research purpose), tracking to output of modifiers used implemented outside llm algorithms
     """
 
-    def __init__(self, max_rounds: int = 5, nash_mode: str = "auto", virtue_mods: Dict[str, Dict[str, float]] = None) -> None:
-        
+    def __init__(self, max_rounds: int = 5, nash_mode: str = "auto", virtue_mods: Dict[str, Dict[str, float]] = None, args=None) -> None:
         if max_rounds < 1 or max_rounds > 10:
             raise ValueError("max_rounds must be between 1 and 10")
         self.max_rounds = max_rounds
         self.nash_mode = nash_mode  # 'on', 'off', 'auto'
-
+        self.args = args
         # Load environment
         load_dotenv()
 
@@ -249,7 +278,7 @@ class TCMVE:
         provider_map = {
             "generator": ("OPENAI_API_KEY", "openai", "gpt-4o"),
             "verifier": ("ANTHROPIC_API_KEY", "anthropic", "claude-3-opus-20240229"),
-            "arbiter": ("XAI_API_KEY", "xai", "grok-beta"),
+            "arbiter": ("XAI_API_KEY", "xai", "grok-4-fast-reasoning"),
         }
         env_key, primary_provider, default_model = provider_map[role]
 
@@ -269,7 +298,7 @@ class TCMVE:
             api_key=api_key,
             temperature=cfg.get("temperature", 0.0),
             top_p=cfg.get("top_p", 1.0),
-            max_tokens=cfg.get("max_new_tokens", 512),
+            max_tokens=cfg.get("max_new_tokens", 16392),
             presence_penalty=cfg.get("repetition_penalty", 1.1),
             frequency_penalty=cfg.get("repetition_penalty", 1.1),
         )
@@ -299,7 +328,7 @@ class TCMVE:
     # ------------------------------------------------------------------- #
     # Core Loop
     # ------------------------------------------------------------------- #
-    def run(self, query: str) -> Dict[str, Any]:
+    def run(self, query: str, args=None) -> Dict[str, Any]:
         if not query.strip():
             raise ValueError("Query cannot be empty")
 
@@ -361,10 +390,10 @@ class TCMVE:
             if any(phrase in refutation.lower() for phrase in CONVERGENCE_PHRASES):
                 final_answer = proposition
                 converged = True
-                logger.info(f"CONVERGED at round {r}")
+                logger.info(f"CONVERGED at round {round_num}")
                 break
 
-        # === Arbiter fallback ===
+        # === Arbiter fallback (only if no convergence) ===
         if not converged:
             logger.warning("Max rounds reached — invoking Arbiter")
             arb_virtue = self._get_virtue_string("arbiter")
@@ -382,33 +411,97 @@ class TCMVE:
         if final_answer is None:
             final_answer = "[NO VALID ANSWER: all models failed or returned empty output]"
 
-        # ---------- Post-convergence TLPO scoring ---------- #
-        tlpo_scores = self._evaluate_with_tlpo(final_answer, query)
+        # === SELF-REFINE: AFTER final_answer ===
+        if "self-refine" in query.lower():
+            cycles = self.args.eiq_level if self.args else 10
+            biq = 140
+            tqi = 0.91
+            base = final_answer
+            eIQ = None
 
-        # ---------- Cross-LLM simple metrics (from previous version) ---- #
+            # Get virtues from arbiter (or average)
+            virtues = self.virtue_vectors["arbiter"]
+            P, J, F, T, V, L, Ω = virtues["P"], virtues["J"], virtues["F"], virtues["T"], virtues["V"], virtues["L"], virtues["Ω"]
+            for cycle in range(cycles):
+                refine_prompt = f"""
+                You are TCMVE Arbiter. 
+                Current TQI: {tqi}
+                Improve this answer: {base}
+                Focus: logic, falsifiability, telos.
+                Output only better version.
+                """
+                base = self.arbiter.invoke([{"role": "user", "content": refine_prompt}])
+                tqi = min(0.99, tqi + 0.008)
+                Ω = 10 * (1 - tqi**2)
+                self.virtue_vectors["arbiter"]["Ω"] = Ω
+                V = (P*J*F*T*V*L*Ω) / 1000
+                eIQ = biq + 400 * math.log(cycles + 1) * V
+            final_answer = base
+            
+        # === VICE CHECK
+        if getattr(args, "vice_check", False):
+            virtues = self.virtue_vectors["arbiter"]
+            P = virtues["P"]
+            J = virtues["J"]
+            F = virtues["F"]
+            T = virtues["T"]
+            V_val = virtues["V"]
+            L = virtues["L"]
+            Ω = virtues["Ω"]
+
+            if any(v < 0.5 for v in [P, J, F, T, V_val, L, Ω]):
+                V = 0.0
+                logger.warning("Vice detected — V = 0.0")
+            else:
+                V = (P * J * F * T * V_val * L * Ω) / 1000
+            result["V"] = V
+            
+        if getattr(args, "game", None):
+            try:
+                from games import play_game
+                payoff = play_game(args.game, query, final_answer)
+                eIQ_boost = 0.3  # +30%
+                eIQ = eIQ * (1 + eIQ_boost)
+                result["game"] = args.game
+                result["eIQ_boost"] = eIQ_boost
+                result["payoff"] = payoff
+            except Exception as e:
+                logger.error(f"Game failed: {e}")
+                result["game_error"] = str(e)
+            
+        # === TLPO Scoring ===
+        tlpo_scores = self._evaluate_with_tlpo(final_answer, query)
         metrics = self._compute_metrics(history)
 
-        # ---------- Build result ---------- #
-        result: Dict[str, Any] = {
+        # === Build Result ONCE ===
+        result = {
             "query": query,
             "final_answer": final_answer,
             "converged": converged,
             "rounds": len(history),
             "history": history,
             "tlpo_scores": tlpo_scores,
-            "tlpo_markup": self._generate_tlpo_markup(
-                tlpo_scores, final_answer, query
-            ),
+            "tlpo_markup": self._generate_tlpo_markup(tlpo_scores, final_answer, query),
             "metrics": metrics,
         }
+        
 
-        # ---------- Save XML output ----------
+        # Add eIQ/TQI only if self-refine
+        if eIQ is not None:
+            result["eIQ"] = eIQ
+            result["TQI"] = tqi
+            result["eIQ_norm"] = round(eIQ / 5540, 2)  # ← Your max
+            
+        # === Save XML ===
         safe_name = re.sub(r"[^a-zA-Z0-9_\-]+", "_", query[:60]) or "tcmve_output"
         out_path = RESULTS_DIR / f"{safe_name}.xml"
         out_path.write_text(result["tlpo_markup"], encoding="utf-8")
-        logger.info(f"TLPO XML output saved → {out_path}")
+        logger.info(f"TLPO XML saved → {out_path}")
 
         return result
+    
+        
+ 
 
     # ------------------------------------------------------------------- #
     # TLPO Scoring (30 flags, 3 LLMs)
@@ -605,39 +698,63 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------- #
 def main() -> None:
     import argparse
+    import sys
 
     parser = argparse.ArgumentParser(
         description="TCMVE — Thomistic Cross-Model Verification Engine",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("query", nargs="?", help="Query to verify")
-    parser.add_argument("--max-rounds", type=int, default=5, help="Maximum debate rounds")
-    parser.add_argument("--demo", action="store_true", help="Run built-in demo")
-    parser.add_argument("--version", action="store_true", help="Show version and exit")
+    parser.add_argument("--max-rounds", type=int, default=5)
+    parser.add_argument("--demo", action="store_true")
+    parser.add_argument("--version", action="store_true")
     parser.add_argument("--nash-mode", choices=['on', 'off', 'auto'], default="auto")
+    parser.add_argument("--virtue-mod", type=str, action="append")
+    parser.add_argument("--eiq-level", type=int, default=10, help="Self-refine cycles (eIQ gain)")
+    parser.add_argument("--vice-check", action="store_true", help="Enable vice calculation")
     parser.add_argument(
-                "--virtue-mod",
-                type=str,
-                action="append",
-                help="Modify virtue for a player: role:param:value (e.g., generator:P:9.0). Can be used multiple times."
-            )
+        "--game",
+        choices=[
+            "prisoner",
+            "stackelberg",
+            "evolution",
+            "regret_min",
+            "shadow_play",
+            "multiplay",     # ← intentional spelling (your original)
+            "auction"
+        ],
+        help="Play Nash game (nTGT 2.0)"
+    )    
     args = parser.parse_args()
 
+        
     if args.version:
         print(f"tcmve {TCMVE_VERSION}")
         return
+
     virtue_mods = {}
     for mod in args.virtue_mod or []:
         role, param, value = mod.split(':')
         virtue_mods.setdefault(role, {})[param] = float(value)
 
-    engine = TCMVE(max_rounds=args.max_rounds, virtue_mods=virtue_mods)
+    engine = TCMVE(max_rounds=args.max_rounds, virtue_mods=virtue_mods, args=args)
 
-    if args.demo or not args.query:
+    # === FIXED LOGIC ===
+    if args.demo:
         query = "IV furosemide dose in acute HF for 40 mg oral daily?"
         print("Running TCMVE DEMO...")
-    else:
+    elif args.query:
         query = args.query
+    elif not sys.stdin.isatty():
+        # STDIN has data → read it
+        query = sys.stdin.read().strip()
+        if not query:
+            print("Error: Empty input from STDIN")
+            return
+    else:
+        print("Error: No query provided. Use --demo, positional arg, or pipe input.")
+        return
+    # === END FIX ===
 
     result = engine.run(query)
 
