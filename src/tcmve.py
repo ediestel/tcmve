@@ -412,12 +412,13 @@ class TCMVE:
             final_answer = "[NO VALID ANSWER: all models failed or returned empty output]"
 
         # === SELF-REFINE: AFTER final_answer ===
+        eIQ = None
         if "self-refine" in query.lower():
             cycles = self.args.eiq_level if self.args else 10
             biq = 140
             tqi = 0.91
             base = final_answer
-            eIQ = None
+            
 
             # Get virtues from arbiter (or average)
             virtues = self.virtue_vectors["arbiter"]
@@ -452,8 +453,8 @@ class TCMVE:
         tlpo_scores = self._evaluate_with_tlpo(final_answer, query)
         metrics = self._compute_metrics(history)
 
-        result["tlpo_scores"] = tlpo_scores,
-        result["tlpo_markup"] = self._generate_tlpo_markup(tlpo_scores, final_answer, query),
+        result["tlpo_scores"] = tlpo_scores
+        result["tlpo_markup"] = self._generate_tlpo_markup(tlpo_scores, final_answer, query)
         result["metrics"] = metrics
         
        
@@ -601,9 +602,10 @@ For each flag 1–30, output JSON:
                 name = flag_def.get("flag_name", f"Flag_{i}")
                 thom = flag_def.get("thomistic_link", "N/A")
 
-                gen = scores.get("generator", {}).get("flag_scores", {}).get(str(i), "N/A")
-                ver = scores.get("verifier", {}).get("flag_scores", {}).get(str(i), "N/A")
-                arb = scores.get("arbiter", {}).get("flag_scores", {}).get(str(i), "N/A")
+                # === SAFE SCORES — ESCAPE ALL LLM OUTPUT ===
+                gen = html.escape(str(scores.get("generator", {}).get("flag_scores", {}).get(str(i), "N/A")), quote=True)
+                ver = html.escape(str(scores.get("verifier", {}).get("flag_scores", {}).get(str(i), "N/A")), quote=True)
+                arb = html.escape(str(scores.get("arbiter", {}).get("flag_scores", {}).get(str(i), "N/A")), quote=True)
 
                 name_esc = html.escape(str(name), quote=True)
                 thom_esc = html.escape(str(thom), quote=True)
@@ -617,30 +619,21 @@ For each flag 1–30, output JSON:
                     f'  </flag>'
                 )
 
-            now = datetime.now().strftime("%Y-%m-%dT%H:%M:%S%z")
-            tqi_w = scores.get("weighted_tqi", 0.0)
-            tcs_w = scores.get("weighted_tcs", 0.0)
-
-            query_esc = html.escape(str(query), quote=True)
-            answer_esc = html.escape(str(answer), quote=True)
-
-            # FINAL — NO COMMA, NO BACKSLASH, 100% STR
-            markup = (
+            # ... rest unchanged ...
+            return (
                 f'<tlpo_markup version="1.2" tcmve_mode="full_diagnostic">\n'
-                f'  <query>{query_esc}</query>\n'
-                f'  <proposition>{answer_esc}</proposition>\n'
+                f'  <query>{html.escape(str(query), quote=True)}</query>\n'
+                f'  <proposition>{html.escape(str(answer), quote=True)}</proposition>\n'
                 + "\n".join(flags_xml) + "\n"
-                + f'  <tqi_weighted>{tqi_w}</tqi_weighted>\n'
-                + f'  <tcs_weighted>{tcs_w}</tcs_weighted>\n'
-                + f'  <audit>\n'
-                + f'    <timestamp>{now}</timestamp>\n'
+                + f'  <tqi_weighted>{scores.get("weighted_tqi", 0.0)}</tqi_weighted>\n'
+                + f'  <tcs_weighted>{scores.get("weighted_tcs", 0.0)}</tcs_weighted>\n'
+                + '  <audit>\n'
+                + f'    <timestamp>{datetime.now().strftime("%Y-%m-%dT%H:%M:%S%z")}</timestamp>\n'
                 + f'    <user>{USER_TAG}</user>\n'
                 + f'    <location>{USER_LOCATION}</location>\n'
-                + f'  </audit>\n'
-                + f'</tlpo_markup>'
+                + '  </audit>\n'
+                + '</tlpo_markup>'
             )
-
-            return markup
     # ------------------------------------------------------------------- #
     # Cross-LLM Simple Metrics (from previous cross-LLM engine)
     # ------------------------------------------------------------------- #
