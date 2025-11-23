@@ -25,7 +25,7 @@ A comprehensive truth verification system combining:
 - **11 Integrated Games**: Prisoner, Auction, Stackelberg, Evolution, Regret, Shadow, Multiplay, Chicken, Stag Hunt, Repeated PD, Ultimatum
 - **Virtue-Driven Reasoning**: 8 virtues (Ω, P, J, F, T, L, V, H) scaled 0.00-1.00
 - **TLPO Lethal Threshold**: TQI < 0.70 triggers immediate virtue collapse (V=0.0, Ω=99.9) - no appeals
-- **33-Flag TLPO Ontology**: Comprehensive Thomistic evaluation (upgraded from 30 flags) including Actus Essendi, Transcendental Convertibility, and Analogy Predication
+- **Embedded Cosine Similarity TLPO**: Pure semantic evaluation using OpenAI text-embedding-3-large against ideal Thomistic metaphysical analysis
 - **Embedding-Based Game Selection**: Semantic similarity matching for optimal game application (OpenAI text-embedding-3-large)
 - **Real-Time Feedback**: WebSocket-powered live logs during processing
 - **Comparative Benchmarking**: Side-by-side analysis of runs and benchmark suites
@@ -117,11 +117,11 @@ Each virtue is scaled 0.00-1.00, representing the degree of virtue expression in
 
 #### TLPO (Thomistic Logic Probability Ontology)
 
-- **Calculation**: 33-flag metaphysical evaluation of Thomistic coherence (upgraded from 30 flags)
-- **Range**: 0.000 - 1.000 (ontological soundness)
-- **Method**: Comprehensive evaluation against Thomistic principles (four causes, act/potency, essence/existence)
+- **Calculation**: Pure embedded cosine similarity against ideal Thomistic metaphysical analysis
+- **Range**: 0.000 - 1.000 (semantic similarity to Thomistic truth)
+- **Method**: OpenAI text-embedding-3-large cosine similarity vs. GPT-4 generated ideal Thomistic responses
 - **Lethal Threshold**: TQI < 0.70 triggers immediate virtue collapse (V=0.0, Ω=99.9)
-- **Future Vision**: Moving toward embedded cosine similarity against ideal Thomistic responses
+- **Implementation**: Real-time embedding comparison with caching for performance
 
 #### V (Vice Score)
 
@@ -539,7 +539,7 @@ Analyze reasoning excellence development patterns for a session.
   - Actus Essendi Scale (essence/existence distinction)
   - Transcendental Convertibility (being→one→truth→good→beauty)
   - Analogy Predication (proportional participation in divine archetypes)
-- **Future Vision**: Moving toward embedded cosine similarity - single semantic distance measurement against ideal Thomistic responses instead of heuristic flags
+- **Embedded Cosine Similarity**: Fully implemented semantic evaluation using OpenAI text-embedding-3-large for direct comparison against ideal Thomistic metaphysical analysis
 
 ### Environment Variables
 All three API keys are required for the system to function with any provider:

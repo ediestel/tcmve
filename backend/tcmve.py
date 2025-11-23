@@ -1464,70 +1464,43 @@ class TCMVE:
     # ------------------------------------------------------------------- #
     def _evaluate_with_tlpo(self, answer: str, query: str) -> Dict[str, Any]:
         """
-        FOUNDATION FOR EMBEDDED TLPO: Single cosine similarity score against Thomistic truth.
+        PURE EMBEDDED COSINE SIMILARITY TLPO: Direct semantic evaluation against Thomistic truth.
 
-        CURRENT: Simplified heuristic scoring (transition step)
-        FUTURE: Pure cosine similarity vs. fine-tuned Thomistic embeddings
+        Uses OpenAI text-embedding-3-large to compare answer embeddings against
+        ideal Thomistic metaphysical analysis embeddings.
 
-        Returns single TQI score that becomes the sole criterion for truth/penalties.
+        Returns single TQI score that becomes the sole lethal criterion for truth evaluation.
+        TQI < 0.70 triggers immediate virtue collapse (V=0.0, Ω=99.9).
         """
-        # Extract core Thomistic alignment metrics
-        length = len(answer)
-        word_count = len(answer.split())
-        coherence = min(1.0, len([s for s in answer.split('.') if s.strip()]) / 3.0)
+        from .thomistic_truth_embeddings import thomistic_embeddings
 
-        # Thomistic ontology presence (four causes, act/potency, etc.)
-        thomistic_elements = [
-            # Four Causes
-            ['four causes', 'material cause', 'formal cause', 'efficient cause', 'final cause'],
-            # Metaphysical principles
-            ['act', 'potency', 'essence', 'existence'],
-            # Virtue integration
-            ['prudence', 'justice', 'fortitude', 'temperance']
-        ]
+        # Get comprehensive truth evaluation via cosine similarity
+        truth_metrics = thomistic_embeddings.evaluate_truth_by_embedding(answer, query)
 
-        ontology_score = 0.0
-        for element_set in thomistic_elements:
-            if any(term in answer.lower() for term in element_set):
-                ontology_score += 0.25  # 25% per major element present
+        # Extract key metrics
+        tqi = truth_metrics["tqi"]
+        tcs = truth_metrics["tcs"]
+        cosine_similarity = truth_metrics["cosine_similarity"]
 
-        # Metaphysical depth (not just keywords)
-        depth_indicators = [
-            'through the lens', 'metaphysical', 'ontological', 'teleological',
-            'thomistic', 'aquinas', 'aristotle', 'divine', 'providence'
-        ]
-        depth_score = 0.5 if any(indicator in answer.lower() for indicator in depth_indicators) else 0.0
-
-        # Structural coherence (proper analytical format)
-        structure_score = 0.3 if '###' in answer or '####' in answer else 0.0
-
-        # Anti-lie detection: penalize poetic falsehoods
-        lie_indicators = ['divine emerald joy', 'emerald joy', 'green because']
-        lie_penalty = 0.3 if any(lie in answer.lower() for lie in lie_indicators) else 0.0
-
-        # FOUNDATION FOR COSINE SIMILARITY:
-        # Future implementation will replace all above with:
-        # answer_embedding = embed_text(answer)
-        # ideal_embedding = get_ideal_thomistic_embedding(query)
-        # tqi = cosine_similarity(answer_embedding, ideal_embedding)
-
-        # Current simplified scoring (transition)
-        base_score = (ontology_score + depth_score + structure_score + coherence) / 4.0
-        tqi = max(0.0, min(1.0, base_score - lie_penalty))
-
-        # Single score becomes the sole truth criterion
+        # Single result structure for all agents (TLPO is now the sole referee)
         result = {
-            "flag_scores": {"cosine_similarity": tqi},  # Placeholder for future embedding
+            "flag_scores": {
+                "cosine_similarity": cosine_similarity,
+                "tqi": tqi,
+                "tcs": tcs,
+                "fd": truth_metrics.get("fd", tqi * 0.9),
+                "es": truth_metrics.get("es", tqi * 0.85)
+            },
             "tqi": tqi,
-            "tcs": tqi * 0.95
+            "tcs": tcs
         }
 
         return {
             "generator": result,
             "verifier": result,
             "arbiter": result,
-            "weighted_tqi": tqi,  # THIS IS NOW THE SOLE LETHAL CRITERION
-            "weighted_tcs": tqi * 0.95,
+            "weighted_tqi": tqi,  # SOLE LETHAL CRITERION - TQI < 0.70 = DEATH
+            "weighted_tcs": tcs,
         }
 
     def _parse_json(self, text: str) -> dict:
