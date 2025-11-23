@@ -1,6 +1,6 @@
 # nTGT-Ω — Thomistic Game Theory Truth Engine
 
-**"Most true" excels "best" *at all times*.**
+**🐳 Docker Ready** | **"Most true" excels "best" *at all times*.**
 
 **Truth Generation via Strategic Thomistic Debate**
 *Ab initio, secundum metaphysicam thomisticam cum ludo theoria.*
@@ -12,6 +12,7 @@
 *Particularly psychotherapy and education, where secular approaches lack awareness of God and metaphysical truth. TCMVE provides "most true" insights without interfering in personal liberty.*
 
 A comprehensive truth verification system combining:
+- **🐳 Docker Deployment**: One-command containerized setup with PostgreSQL, Redis, FastAPI, Next.js
 - **Python Engine**: Core TCMVE with virtue vectors, debate rounds, Nash equilibrium
 - **FastAPI Backend**: REST API with WebSocket logs, database storage
 - **Next.js Frontend**: Intuitive dashboard with virtue sliders, game modes, live feedback
@@ -32,6 +33,7 @@ A comprehensive truth verification system combining:
 - **Generic Trials Dashboard**: Universal research platform supporting any trial format (ARCHER, longitudinal studies, A/B tests)
 - **ARCHER-1.0 Intelligence Enhancement**: Empirical research framework for measuring intelligence improvements through Thomistic reasoning excellence training
 - **Reasoning Excellence Persistence**: PostgreSQL-backed long-term reasoning development tracking with Thomistic safeguards for ARCHER self-improvement
+- **🐳 Docker Deployment**: Complete containerized stack with docker-compose (PostgreSQL + Redis + FastAPI + Next.js)
 - **API Robustness**: Enterprise-grade reliability with retry logic, exponential backoff, and automatic provider fallback chains
 - **Extensible LLMs**: Support for OpenAI, Anthropic (Claude), xAI (Grok), and local models (e.g., Ollama) with intelligent failover
 - **Database Persistence**: SQLite for runs/benchmarks, PostgreSQL for long-term virtue evolution tracking
@@ -193,46 +195,146 @@ Through analogy of being, TCMVE evaluates how well answers participate in divine
 ## Quick Start
 
 ### Prerequisites
-- Python 3.11+
-- Node.js 20+
+- Docker & Docker Compose (recommended)
 - API keys for LLM providers (OpenAI, Anthropic, xAI/Grok, or Ollama)
 
-### Installation
+### 🚀 Docker Deployment (Recommended)
 
-1. **Clone and setup**:
-   ```bash
-   git clone https://github.com/ediestel/tcmve.git
-   cd tcmve
-   python -m venv .venv
-   source .venv/bin/activate  # Linux/macOS
-   # .venv\Scripts\activate   # Windows
-   ```
+**One-command containerized deployment:**
 
-2. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   cd frontend && npm install && cd ..
-   ```
+```bash
+# 1. Clone repository
+git clone https://github.com/ediestel/tcmve.git
+cd tcmve
 
-3. **Configure environment**:
-   ```bash
-   # Create .env in project root
-   cat > .env << EOF
-   OPENAI_API_KEY=sk-...
-   ANTHROPIC_API_KEY=sk-ant-...
-   XAI_API_KEY=xai-...
-   EOF
-   ```
+# 2. Configure environment
+cp .env.docker .env
+# Edit .env with your API keys (OpenAI, Anthropic, xAI)
 
-4. **Run the application**:
-   ```bash
-   npm run dev     # Development mode (with hot reload)
-   # OR
-   npm run start:all  # Production mode (builds frontend first)
-   ```
+# 3. Launch all services
+docker-compose up -d
 
-5. **Access the dashboard**:
-   Open http://localhost:3000 in your browser.
+# 4. Access TCMVE
+# Frontend Dashboard: http://localhost:3000
+# Backend API: http://localhost:8000/docs
+# Database Admin: http://localhost:5050 (admin@tcmve.local / admin)
+```
+
+**That's it!** Full-stack TCMVE running in containers with:
+- ✅ PostgreSQL database with automatic backups
+- ✅ Redis caching for performance
+- ✅ FastAPI backend with health monitoring
+- ✅ Next.js frontend with real-time updates
+- ✅ Automatic service discovery and networking
+
+**Docker commands:**
+```bash
+# View service status
+docker-compose ps
+
+# View logs
+docker-compose logs -f backend
+
+# Stop all services
+docker-compose down
+
+# Update after code changes
+docker-compose up --build -d
+
+# Scale backend for high load
+docker-compose up -d --scale backend=3
+```
+
+### 🐍 Manual Installation (Alternative)
+
+**Automated script installation:**
+
+```bash
+git clone https://github.com/ediestel/tcmve.git
+cd tcmve
+./install.sh
+```
+
+**Manual setup** (if Docker unavailable):
+
+```bash
+# 1. Clone and setup
+git clone https://github.com/ediestel/tcmve.git
+cd tcmve
+python3 -m venv .venv
+source .venv/bin/activate  # Linux/macOS
+
+# 2. Install dependencies
+pip install -e .[dev]
+cd frontend && npm install && cd ..
+
+# 3. Configure environment
+cp .env.example .env  # Add your API keys
+
+# 4. Setup database (optional)
+python setup_database.py
+
+# 5. Run application
+npm run dev  # Development
+# OR
+npm run build && npm start  # Production
+```
+
+**Access the dashboard:** Open http://localhost:3000
+
+## Docker Deployment
+
+**One-command containerized deployment:**
+
+```bash
+# 1. Clone repository
+git clone https://github.com/ediestel/tcmve.git
+cd tcmve
+
+# 2. Configure environment
+cp .env.docker .env
+# Edit .env with your API keys
+
+# 3. Launch all services
+docker-compose up -d
+
+# 4. Access services
+# Frontend: http://localhost:3000
+# Backend API: http://localhost:8000
+# PgAdmin: http://localhost:5050 (admin@tcmve.local / admin)
+```
+
+**Services included:**
+- **PostgreSQL Database**: Persistent data storage with health checks
+- **Redis Cache**: High-performance caching for LLM responses
+- **FastAPI Backend**: REST API with automatic scaling and health monitoring
+- **Next.js Frontend**: React dashboard with real-time updates
+- **PgAdmin**: Database management interface (optional)
+
+**Docker commands:**
+```bash
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+
+# Rebuild after code changes
+docker-compose up --build -d
+
+# Scale backend services
+docker-compose up -d --scale backend=3
+```
+
+**Production deployment:**
+```bash
+# Use production environment
+cp .env.docker .env.production
+# Configure production database URLs, secrets, etc.
+
+# Deploy with production overrides
+docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d
+```
 
 ## Architecture
 
