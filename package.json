@@ -1,0 +1,28 @@
+{
+  "name": "ntgt-omega",
+  "version": "1.0.0",
+  "private": true,
+  "description": "nTGT-Ω — Full-stack Thomistic truth engine with Next.js 15 frontend + FastAPI backend (embeddings, chunking, RAG)",
+  "author": "@ECKHART_DIESTEL",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"source .venv/bin/activate && lsof -ti :8000 | xargs kill -9 2>/dev/null || true && uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload\" \"cd frontend && npm run dev\"",
+    "start:all": "source .venv/bin/activate && lsof -ti :8000 | xargs kill -9 2>/dev/null || true && npm run build && concurrently \"uvicorn api.main:app --host 0.0.0.0 --port 8000\" \"cd frontend && npm run start\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "source .venv/bin/activate && lsof -ti :8000 | xargs kill -9 2>/dev/null || true && uvicorn api.main:app --host 0.0.0.0 --reload --port 8000",
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm start",
+    "lint": "cd frontend && npm run lint",
+    "type-check": "cd frontend && npm run type-check"
+  },
+  "dependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "concurrently": "^8.2.2",
+    "react-markdown": "^10.1.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "python": ">=3.11"
+  }
+}

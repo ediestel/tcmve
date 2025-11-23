@@ -1,7 +1,0 @@
-pyproject.toml
-src/tcmve.egg-info/PKG-INFO
-src/tcmve.egg-info/SOURCES.txt
-src/tcmve.egg-info/dependency_links.txt
-src/tcmve.egg-info/entry_points.txt
-src/tcmve.egg-info/requires.txt
-src/tcmve.egg-info/top_level.txt

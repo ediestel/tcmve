@@ -29,6 +29,8 @@ classifiers = [
 keywords = ["llm", "hallucination", "drift", "verification", "thomism", "metaphysics", "truth", "convergence", "ai-safety"]
 requires-python = ">=3.10"
 dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
     "langchain-openai>=0.1.0",
     "langchain-anthropic>=0.1.0",
     "langchain-groq>=0.1.0",
@@ -36,7 +38,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "black>=23.0", "flake8>=6.0"]
+dev = ["pytest>=7.0", "pytest-asyncio", "black>=23.0", "flake8>=6.0"]
 paper = ["matplotlib>=3.7", "pandas>=2.0"]
 
 [project.urls]
@@ -47,12 +49,12 @@ Issues = "https://github.com/ediestel/tcmve/issues"
 Paper = "https://github.com/ediestel/tcmve/blob/main/main.pdf"
 
 [project.scripts]
-tcmve = "tcmve:main"
+tcmve = "backend.tcmve:main"
 
 # === GENERIC ROOT LAYOUT (WORKS ON ANY MACHINE) ===
 [tool.setuptools.packages.find]
-where = ["src"]
-include = ["src"]
+where = ["."]
+include = ["backend*"]
 
 [tool.setuptools.package-data]
 "tcmve" = [

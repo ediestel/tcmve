@@ -1,2 +1,2 @@
 [console_scripts]
-tcmve = tcmve:main
+tcmve = backend.tcmve:main

@@ -1,1 +1,29 @@
+
+### Step 1 – Add these lines to your root **.gitignore** (once and forever)
+# nTGT-Ω — Sacred & Private Data (never push!)
 .env
+.venv
+public/data/
+public/uploads/
+public/results/
+public/chroma/
+chroma/
+*.xml
+*.csv
+*.html
+*.pdf
+*.docx
+*.txt
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+.next/
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db

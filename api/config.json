@@ -1,0 +1,57 @@
+{
+  "virtues": {
+    "generator": [
+      0.8,
+      0.8,
+      0.75,
+      0.65,
+      0.85,
+      0.72,
+      0.85,
+      0.89
+    ],
+    "verifier": [
+      0.9,
+      0.9,
+      0.95,
+      0.8,
+      0.9,
+      0.65,
+      0.9,
+      0.95
+    ],
+    "arbiter": [
+      0.85,
+      0.85,
+      0.8,
+      0.9,
+      0.85,
+      0.85,
+      0.8,
+      0.85
+    ]
+  },
+  "flags": {
+    "maritalFreedom": false,
+    "viceCheck": false,
+    "selfRefine": false,
+    "tlpoFull": false,
+    "noXml": false,
+    "sevenDomains": false,
+    "virtuesIndependent": false,
+    "useGenerator": false,
+    "useVerifier": false,
+    "useArbiter": true,
+    "maxRounds": 5,
+    "nashMode": "auto",
+    "eiqLevel": 10,
+    "simulatedPersons": 24,
+    "biqDistribution": "gaussian",
+    "meanBiq": 100,
+    "sigmaBiq": 15,
+    "output": "result",
+    "generatorProvider": "openai",
+    "verifierProvider": "xai",
+    "arbiterProvider": "xai"
+  }
+}

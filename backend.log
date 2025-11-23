@@ -1,0 +1,17 @@
+INFO:     Will watch for changes in these directories: ['/Users/eckhartdiestel/Desktop/tcmve']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [58792] using WatchFiles
+02:42:37 | INFO | TCMVE initialized: Generator, Verifier, Arbiter ready with virtue vectors
+INFO:     Started server process [58834]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:56260 - "GET /docs HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [58834]
+02:47:49 | INFO | TCMVE initialized: Generator, Verifier, Arbiter ready with virtue vectors
+INFO:     Started server process [60974]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
