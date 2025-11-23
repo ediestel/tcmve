@@ -107,6 +107,47 @@ Each virtue is scaled 0.00-1.00, representing the degree of virtue expression in
 - **Criteria**: Balance ratio > 0.7, Arbiter readiness > 12.0, Fortitude > 3.0
 - **Effects**: Dynamically adjusts virtue vectors for strategic convergence
 
+## Why It Works: The Metaphysical Foundation
+
+### The Thomistic Advantage
+
+**TCMVE doesn't just seek truth—it embodies metaphysical truth itself.** The system works because it operationalizes Thomas Aquinas's insight that truth is not merely correspondence but *participation in divine truth*. By embedding Thomistic principles directly into the evaluation framework, TCMVE creates a truth-seeking engine that transcends mere factual accuracy.
+
+### Four Causes Integration
+
+Every TCMVE evaluation implicitly considers Aristotle's four causes through the TLPO framework:
+
+- **Material Cause**: The physical/linguistic substrate of the answer
+- **Formal Cause**: The metaphysical structure and Thomistic coherence
+- **Efficient Cause**: The generative process guided by virtue vectors
+- **Final Cause**: Telos-directed truth-seeking toward divine participation
+
+### Virtue Ethics as Optimization
+
+The 8 Thomistic virtues (P, J, F, T, V, L, H, Ω) serve as optimization parameters that prevent the "beautiful lie" problem. Unlike purely accuracy-based systems, TCMVE's virtue-weighted evaluation ensures that truth must be *beautiful*—harmonious with metaphysical reality.
+
+### Game Theory as Dialectical Truth
+
+Nash equilibrium detection operationalizes Hegelian dialectic in computational form. The Generator-Verifier-Arbiter triad mirrors thesis-antithesis-synthesis, where strategic balance indicates convergence toward metaphysical truth rather than mere consensus.
+
+### Embedded Cosine Similarity: Semantic Metaphysics
+
+The lethal TLPO threshold (TQI < 0.70) represents the metaphysical boundary between being and non-being. Answers below this threshold don't just fail—they metaphysically *collapse*, reflecting Aquinas's principle that evil is privation of being.
+
+### The Ω Humility Formula
+
+**Ω = 10 × (1 - TQI²)** prevents overconfidence while maintaining truth-seeking. This operationalizes Aquinas's *recognitio finitudinis*—the recognition of human finitude—as a dynamic penalty that scales with certainty levels.
+
+### Why Secular Approaches Fail
+
+Modern AI systems fail because they lack metaphysical foundations. They can achieve high accuracy but cannot distinguish between "beautiful lies" and transcendent truth. TCMVE works because it evaluates answers not just for correctness, but for *ontological depth*—participation in the hierarchy of being.
+
+### The Divine Archetype Principle
+
+Through analogy of being, TCMVE evaluates how well answers participate in divine archetypes. High TQI scores indicate proportional participation in transcendent truth, while low scores reveal privation of metaphysical being.
+
+**Result**: A truth engine that doesn't just find answers—it uncovers metaphysical reality itself.
+
 ### Tracking Variables
 
 #### eIQ (Enhanced Intelligence Quotient)
