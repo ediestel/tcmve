@@ -1,802 +1,212 @@
-# nTGT-Ω — Thomistic Game Theory Truth Engine
-
-**🐳 Docker Ready** | **"Most true" excels "best" *at all times*.**
-
-**Truth Generation via Strategic Thomistic Debate**
-*Ab initio, secundum metaphysicam thomisticam cum ludo theoria.*
-
-**Philosophical Safeguards Against Moralism**
-*TCMVE is a truth-seeking engine, not a moral authority. It enhances metaphysical awareness without interfering in personal liberty or enforcing ethical standards.*
-
-**Restoring Metaphysical Foundations to Modern Applications**
-*Particularly psychotherapy and education, where secular approaches lack awareness of God and metaphysical truth. TCMVE provides "most true" insights without interfering in personal liberty.*
-
-A comprehensive truth verification system combining:
-- **🐳 Docker Deployment**: One-command containerized setup with PostgreSQL, Redis, FastAPI, Next.js
-- **Python Engine**: Core TCMVE with virtue vectors, debate rounds, Nash equilibrium
-- **FastAPI Backend**: REST API with WebSocket logs, database storage
-- **Next.js Frontend**: Intuitive dashboard with virtue sliders, game modes, live feedback
-- **Game Theory Integration**: 11 Nash games (Prisoner, Auction, Stackelberg, Evolution, Chicken, Stag Hunt, etc.)
-- **Benchmarking Suite**: Comparative analysis and historical tracking
-- **XML Schemata**: Standardized output validation
-
-## Features
-
-- **Thomistic Game Theory**: Strategic debate between Generator/Verifier with Nash equilibrium detection
-- **11 Integrated Games**: Prisoner, Auction, Stackelberg, Evolution, Regret, Shadow, Multiplay, Chicken, Stag Hunt, Repeated PD, Ultimatum
-- **Virtue-Driven Reasoning**: 8 virtues (Ω, P, J, F, T, L, V, H) scaled 0.00-1.00
-- **TLPO Lethal Threshold**: TQI < 0.70 triggers immediate virtue collapse (V=0.0, Ω=99.9) - no appeals
-- **Embedded Cosine Similarity TLPO**: Pure semantic evaluation using OpenAI text-embedding-3-large against ideal Thomistic metaphysical analysis
-- **Embedding-Based Game Selection**: Semantic similarity matching for optimal game application (OpenAI text-embedding-3-large)
-- **Sermon on the Mount 33-Flag Ontology**: Complete mapping of all 33 TLPO flags to biblical passages from Matthew 5-7, providing scriptural foundation for Thomistic AI parameters
-- **Real-Time Feedback**: WebSocket-powered live logs during processing
-- **Comparative Benchmarking**: Side-by-side analysis of runs and benchmark suites
-- **Generic Trials Dashboard**: Universal research platform supporting any trial format (ARCHER, longitudinal studies, A/B tests)
-- **ARCHER-1.0 Intelligence Enhancement**: Empirical research framework for measuring intelligence improvements through Thomistic reasoning excellence training
-- **Reasoning Excellence Persistence**: PostgreSQL-backed long-term reasoning development tracking with Thomistic safeguards for ARCHER self-improvement
-- **🐳 Docker Deployment**: Complete containerized stack with docker-compose (PostgreSQL + Redis + FastAPI + Next.js)
-- **API Robustness**: Enterprise-grade reliability with retry logic, exponential backoff, and automatic provider fallback chains
-- **Extensible LLMs**: Support for OpenAI, Anthropic (Claude), xAI (Grok), and local models (e.g., Ollama) with intelligent failover
-- **Database Persistence**: SQLite for runs/benchmarks, PostgreSQL for long-term virtue evolution tracking
-- **Open-Source**: MIT licensed, ready for community contributions
-
-## Core Concepts
-
-### Virtue Variables (0.00-1.00 Scale)
-Following Thomistic virtue ethics, each agent (Generator, Verifier, Arbiter) has virtue parameters drawn from the classical tradition:
-
-**4 Cardinal Virtues (Basic Human Virtues):**
-- **P (Prudence)**: Practical wisdom - Careful decision-making and foresight
-- **J (Justice)**: Fairness - Equitable treatment and moral balance
-- **F (Fortitude)**: Courage - Persistence and resilience in debate
-- **T (Temperance)**: Self-control - Moderation and balanced approach
-
-**3 Theological Virtues (Divine Virtues):**
-- **V (Faith)**: Faith - Trust in divine truth and faithful reasoning
-- **L (Love/Charity)**: Love/Charity - Compassion and relational intelligence
-- **H (Hope)**: Hope - Confident expectation and aspiration toward truth
-
-**Humility (Foundational Virtue):**
-- **Ω (Omega/Humility)**: Humility - Intellectual humility and metaphysical insight (prevents overconfidence; e.g., Ω=0.97 allows 3% error tolerance)
-
-Each virtue is scaled 0.00-1.00, representing the degree of virtue expression in the agent's reasoning process.
-
-### Philosophical Safeguards: Truth Engine, Not Moral Authority
-
-**TCMVE's Core Commitment**: This system exists to address the lack of metaphysical awareness in psychotherapy and education, where secular approaches lack awareness of God and religious truth. It provides "most true" insights that excel "best" practical approaches.
-
-**Liberty Principle**: TCMVE does not interfere with personal liberty (libertas). If asked about nude imagery or crude remarks, it will provide its metaphysical perspective but does not enforce moral standards or restrict personal freedom.
-
-**Truth vs Morality**: The system focuses on truth-seeking excellence, not moral judgment. MCQs generated by TCMVE are metaphysical masterclasses teaching doctors to seek "most true" solutions rather than merely "best" practical outcomes.
-
-**Ongoing Vigilance**: Philosophy is never "locked in." These safeguards must be actively maintained to prevent moralism from creeping back. The system enhances reasoning without becoming prescriptive.
-
-**See**: [PHILOSOPHICAL_COMMITMENT.md](PHILOSOPHICAL_COMMITMENT.md) for detailed commitment to truth-seeking liberty.
-
-### Game Modes
-
-#### All Games (Default)
-
-- **Description**: Cycles through all 11 game theory frameworks each round
-- **Behavior**: Generator proposes → Verifier refutes → Game applied → Nash check → Repeat
-- **Equilibrium**: System detects strategic balance and may trigger early Arbiter intervention
-- **Use Case**: Comprehensive game theory analysis, maximum strategic depth
-
-#### Separate Mode
-
-- **Description**: Applies only one specific game theory framework
-- **Behavior**: Choose from: prisoner, auction, stackelberg, evolution, regret_min, shadow_play, multiplay
-- **Equilibrium**: Game-specific Nash detection and virtue adjustments
-- **Use Case**: Focused analysis of specific strategic dynamics
-
-#### Embedding Mode
-
-- **Description**: Uses semantic similarity (OpenAI text-embedding-3-large) to select optimal games
-- **Behavior**: Embeds query against stored game narratives for semantic matching
-- **Equilibrium**: Same as dynamic mode with embedding-based game selection
-- **Use Case**: Context-aware game selection based on conceptual relevance
-
-#### Arbiter Only Mode
-
-- **Description**: Bypasses Generator and Verifier, goes directly to Arbiter
-- **Behavior**: Single LLM call with full virtue profile for final judgment
-- **Equilibrium**: N/A (no strategic interaction)
-- **Use Case**: Quick answers, high-confidence queries, or when debate would be unproductive
-
-### Nash Equilibrium Detection
-
-- **Automatic**: Triggers when `nashMode='auto'` and max_rounds > 2
-- **Manual**: Always active when `nashMode='on'`
-- **Criteria**: Balance ratio > 0.7, Arbiter readiness > 12.0, Fortitude > 3.0
-- **Effects**: Dynamically adjusts virtue vectors for strategic convergence
-
-## Why It Works: The Metaphysical Foundation
-
-### The Thomistic Advantage
-
-**TCMVE doesn't just seek truth—it embodies metaphysical truth itself.** The system works because it operationalizes Thomas Aquinas's insight that truth is not merely correspondence but *participation in divine truth*. By embedding Thomistic principles directly into the evaluation framework, TCMVE creates a truth-seeking engine that transcends mere factual accuracy.
-
-### Four Causes Integration
-
-Every TCMVE evaluation implicitly considers Aristotle's four causes through the TLPO framework:
-
-- **Material Cause**: The physical/linguistic substrate of the answer
-- **Formal Cause**: The metaphysical structure and Thomistic coherence
-- **Efficient Cause**: The generative process guided by virtue vectors
-- **Final Cause**: Telos-directed truth-seeking toward divine participation
-
-### Virtue Ethics as Optimization
-
-The 8 Thomistic virtues (P, J, F, T, V, L, H, Ω) serve as optimization parameters that prevent the "beautiful lie" problem. Unlike purely accuracy-based systems, TCMVE's virtue-weighted evaluation ensures that truth must be *beautiful*—harmonious with metaphysical reality.
-
-### Game Theory as Dialectical Truth
-
-Nash equilibrium detection operationalizes Hegelian dialectic in computational form. The Generator-Verifier-Arbiter triad mirrors thesis-antithesis-synthesis, where strategic balance indicates convergence toward metaphysical truth rather than mere consensus.
-
-### Embedded Cosine Similarity: Semantic Metaphysics
-
-The lethal TLPO threshold (TQI < 0.70) represents the metaphysical boundary between being and non-being. Answers below this threshold don't just fail—they metaphysically *collapse*, reflecting Aquinas's principle that evil is privation of being.
-
-### The Ω Humility Formula
-
-**Ω = 10 × (1 - TQI²)** prevents overconfidence while maintaining truth-seeking. This operationalizes Aquinas's *recognitio finitudinis*—the recognition of human finitude—as a dynamic penalty that scales with certainty levels.
-
-### Why Secular Approaches Fail
-
-Modern AI systems fail because they lack metaphysical foundations. They can achieve high accuracy but cannot distinguish between "beautiful lies" and transcendent truth. TCMVE works because it evaluates answers not just for correctness, but for *ontological depth*—participation in the hierarchy of being.
-
-### The Divine Archetype Principle
-
-Through analogy of being, TCMVE evaluates how well answers participate in divine archetypes. High TQI scores indicate proportional participation in transcendent truth, while low scores reveal privation of metaphysical being.
-
-**Result**: A truth engine that doesn't just find answers—it uncovers metaphysical reality itself.
-
-### Tracking Variables
-
-#### eIQ (Enhanced Intelligence Quotient)
-
-- **Calculation**: `(P × J × F × T × V × L × H × Ω) / 1000`
-- **Range**: 0.000 - 1.000 (probability of truth)
-- **Boost**: +30% from game applications, +40% from Nash equilibrium
-
-#### TLPO (Thomistic Logic Probability Ontology)
-
-- **Calculation**: Pure embedded cosine similarity against ideal Thomistic metaphysical analysis
-- **Range**: 0.000 - 1.000 (semantic similarity to Thomistic truth)
-- **Method**: OpenAI text-embedding-3-large cosine similarity vs. GPT-4 generated ideal Thomistic responses
-- **Lethal Threshold**: TQI < 0.70 triggers immediate virtue collapse (V=0.0, Ω=99.9)
-- **Implementation**: Real-time embedding comparison with caching for performance
-
-#### V (Vice Score)
-
-- **Calculation**: Same as eIQ but with vice penalties
-- **Effect**: Reduces eIQ gain when vice detected
-- **Trigger**: Inappropriate content or unethical reasoning
-
-### Agent Roles
-
-#### Generator
-
-- **Function**: Creates initial propositions from query
-- **Strategy**: Balances creativity with prudence
-- **Virtue Focus**: High Ω (wisdom) and P (prudence) for sound foundations
-
-#### Verifier
-
-- **Function**: Challenges and refutes Generator propositions
-- **Strategy**: Identifies contradictions and weaknesses
-- **Virtue Focus**: High J (justice) and F (fortitude) for rigorous testing
-
-#### Arbiter
-
-- **Function**: Makes final judgment when equilibrium reached
-- **Strategy**: Synthesizes Generator/Verifier positions
-- **Virtue Focus**: High Ω (wisdom) and L (love) for charitable truth
-
-## Quick Start
-
-### Prerequisites
-- Docker & Docker Compose (recommended)
-- API keys for LLM providers (OpenAI, Anthropic, xAI/Grok, or Ollama)
-
-### 🚀 Docker Deployment (Recommended)
-
-**One-command containerized deployment:**
-
-```bash
-# 1. Clone repository
-git clone https://github.com/ediestel/tcmve.git
-cd tcmve
-
-# 2. Configure environment
-cp .env.docker .env
-# Edit .env with your API keys (OpenAI, Anthropic, xAI)
-
-# 3. Launch all services
-docker-compose up -d
-
-# 4. Access TCMVE
-# Frontend Dashboard: http://localhost:3000
-# Backend API: http://localhost:8000/docs
-# Database Admin: http://localhost:5050 (admin@tcmve.local / admin)
-```
-
-**That's it!** Full-stack TCMVE running in containers with:
-- ✅ PostgreSQL database with automatic backups
-- ✅ Redis caching for performance
-- ✅ FastAPI backend with health monitoring
-- ✅ Next.js frontend with real-time updates
-- ✅ Automatic service discovery and networking
-
-**Docker commands:**
-```bash
-# View service status
-docker-compose ps
-
-# View logs
-docker-compose logs -f backend
-
-# Stop all services
-docker-compose down
-
-# Update after code changes
-docker-compose up --build -d
-
-# Scale backend for high load
-docker-compose up -d --scale backend=3
-```
-
-### 🐍 Manual Installation (Alternative)
-
-**Automated script installation:**
-
+# TCMVE User Manual
+## Version 1.0 | November 24, 2025 10:15 AM CET
+**Author**: @ECKHART_DIESTEL
+**X Handle**: [@ECKHART_DIESTEL](https://x.com/ECKHART_DIESTEL)
+**Country**: DE
+**Contact**: eckhart.diestel@gmail.com
+**GitHub**: [https://github.com/ediestel/tcmve](https://github.com/ediestel/tcmve)
+**License**: MIT (Open-source)
+
+---
+
+### **Disclaimer**
+TCMVE is a **research-grade, prompt-only, cross-LLM verification engine** for eliminating factual errors and ontological drift.
+**No warranties.** Use at your own risk.
+Ensure compliance with API terms (OpenAI, Anthropic, Groq/xAI).
+NSFW filtering is disabled per user preference — TCMVE focuses on **truth**, not content.
+
+For the full IEEE paper, see `main.tex`.
+
+---
+
+### **1. Introduction**
+
+#### **What is TCMVE?**
+**Truth-Convergent Metaphysical Verification Engine** — enforces truth from **first principles** using:
+- **Thomistic metaphysics** (non-contradiction, four causes, act/potency)
+- **Game-theoretic refutation** (Generator → Verifier → Arbiter)
+- **Zero-domain derivation** (no external ontology)
+- **TLPO v1.2** (30 diagnostic flags)
+
+**Key Results**:
+- Converges in **2 rounds** across 6 domains
+- **TCS ≥ 0.95**, **FD ≥ 0.93**
+- **0% guideline violations** post-convergence
+- **ABIM MCQs: 10/10** at Catholic institution
+
+#### **System Requirements**
+- **Python**: 3.10+
+- **RAM**: 8GB+
+- **Internet**: Required
+- **API Keys**: OpenAI, Anthropic, Groq
+- **Disk**: 500MB
+
+---
+
+### **2. Installation**
+
+#### **Step 1: Clone Repo**
 ```bash
 git clone https://github.com/ediestel/tcmve.git
 cd tcmve
-./install.sh
 ```
 
-**Manual setup** (if Docker unavailable):
-
+#### **Step 2: Set Up Environment**
 ```bash
-# 1. Clone and setup
-git clone https://github.com/ediestel/tcmve.git
-cd tcmve
-python3 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate  # Linux/macOS
-
-# 2. Install dependencies
-pip install -e .[dev]
-cd frontend && npm install && cd ..
-
-# 3. Configure environment
-cp .env.example .env  # Add your API keys
-
-# 4. Setup database (optional)
-python setup_database.py
-
-# 5. Run application
-npm run dev  # Development
-# OR
-npm run build && npm start  # Production
+# .venv\Scripts\activate   # Windows
 ```
 
-**Access the dashboard:** Open http://localhost:3000
+#### **Now with installer script**
 
-## Docker Deployment
-
-**One-command containerized deployment:**
+# Development install
 
 ```bash
-# 1. Clone repository
-git clone https://github.com/ediestel/tcmve.git
-cd tcmve
-
-# 2. Configure environment
-cp .env.docker .env
-# Edit .env with your API keys
-
-# 3. Launch all services
-docker-compose up -d
-
-# 4. Access services
-# Frontend: http://localhost:3000
-# Backend API: http://localhost:8000
-# PgAdmin: http://localhost:5050 (admin@tcmve.local / admin)
+pip install -e .
 ```
 
-**Services included:**
-- **PostgreSQL Database**: Persistent data storage with health checks
-- **Redis Cache**: High-performance caching for LLM responses
-- **FastAPI Backend**: REST API with automatic scaling and health monitoring
-- **Next.js Frontend**: React dashboard with real-time updates
-- **PgAdmin**: Database management interface (optional)
+# Run via CLI
+tcmve
 
-**Docker commands:**
+#### **Step 3: Install Dependencies**
 ```bash
-# View logs
-docker-compose logs -f
-
-# Stop services
-docker-compose down
-
-# Rebuild after code changes
-docker-compose up --build -d
-
-# Scale backend services
-docker-compose up -d --scale backend=3
+pip install -r requirements.txt
 ```
 
-**Production deployment:**
+`requirements.txt`:
+```txt
+langchain-openai
+langchain-anthropic
+langchain-groq
+python-dotenv
+```
+
+#### **Step 4: Add API Keys**
+Create `.env`:
+```env
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+GROQ_API_KEY=gsk-...
+```
+
+#### **Step 5: Test**
 ```bash
-# Use production environment
-cp .env.docker .env.production
-# Configure production database URLs, secrets, etc.
-
-# Deploy with production overrides
-docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d
+python tcmve.py
 ```
 
-## Architecture
+---
 
-### Backend (FastAPI)
-- **Endpoints**: `/run`, `/logs`, `/defaults`, `/benchmarks`, `/export`, `/trials`, `/trials/{filename}`
-- **WebSockets**: `/ws/logs` for real-time log streaming (fixed IP binding to 127.0.0.1)
-- **Database**: SQLite for runs/benchmarks, PostgreSQL for virtue evolution tracking
-- **API Robustness**: Retry logic with exponential backoff, automatic provider fallback chains, comprehensive error handling
-- **Security**: Input sanitization, rate limiting, CORS
+### **3. Core Files Reference**
 
-### Frontend (Next.js)
-- **Dashboard**: Virtue sliders, flag toggles, live logs
-- **Benchmarking**: Run and compare benchmark suites
-- **Results**: Historical runs and benchmarks with comparison tables
-- **Defaults**: CRUD management for virtue sets
+#### **3.1 `tcmve.py`**
+**Main Engine** — **Only file to run**.
+- Cross-LLM: GPT-4o (Generator), Claude-3 (Verifier), Grok-4 (Arbiter)
+- Full TLPO scoring (30 flags)
+- Auto-saves `<tlpo_markup>` to `results/*.xml`
+- Run: `python tcmve.py`
 
-### Engine (Python)
-- **Roles**: Generator (creates propositions), Verifier (challenges), Arbiter (judges)
-- **Virtues**: Ω (Humility), P (Prudence), J (Justice), F (Fortitude), T (Temperance), L (Love), Faith, Hope
-- **Games**: Optional Nash game integration (prisoner, auction, etc.)
-- **Self-Refine**: Iterative improvement cycles for higher eIQ
+#### **3.2 `tcmve_system.txt`**
+**Metaphysical Prompt** — Enforces truth from being.
+```text
+You are TCMVE: Truth from Being.
 
-## Usage
+Derive all truth from:
+1. Non-contradiction
+2. Act and potency
+3. Four causes
+4. Completeness: gaps = contradictions → expand
 
-### Basic Query
-1. Navigate to the Dashboard
-2. Adjust virtue sliders (0.00-1.00 scale) for Generator/Verifier/Arbiter
-3. Enter your query in Thomistic metaphysical terms
-4. Configure game mode:
-   - **All Games**: Cycles through all 11 games for comprehensive analysis
-   - **Separate Game**: Choose specific game (prisoner, auction, stackelberg, etc.)
-   - **Recommended Set**: Uses games optimized for your virtue preset
-5. Set Nash mode: 'off', 'auto', or 'on' for equilibrium detection
-6. Toggle flags: self-refine, vice-check, marital-freedom, etc.
-7. Click "Run TCMVE"
-8. View real-time logs showing game applications and Nash detection
+NO LLM PARAMETERS.
+NO DOMAIN ONTOLOGY.
+NO EXTERNAL CITATION.
 
-### Advanced Configuration
+OUTPUT:
+<proposition>Answer</proposition>
+<causes>Final:X | Efficient:Y | Material:Z | Formal:W</causes>
+<derived_tag><new_truth></derived_tag>
 
-#### Game Theory Settings
-- **nashMode**: Controls equilibrium detection
-  - `off`: No Nash checking
-  - `auto`: Triggers after round 2 when max_rounds > 2
-  - `on`: Always check for equilibrium
-- **gameMode**: Game application strategy
-  - `all`: Cycle through all games each round (All Games)
-  - `separate`: Apply only selected game (Separate Game)
-  - `recommended_set`: Use preset-recommended games (Recommended Set)
-- **selectedGame**: Specific game when using separate mode
-
-#### Virtue Tuning
-Each agent has 8 virtues scaled 0.00-1.00:
-- **High Ω**: Increases metaphysical depth
-- **High P**: Improves decision quality
-- **High J**: Strengthens ethical reasoning
-- **High F**: Boosts debate persistence
-- **High L**: Enhances relational intelligence
-
-#### Content Preservation Settings
-
-- **contentPreservationMode**: Controls how input text is handled (default: 'preserve')
-  - `'preserve'`: Preserve ALL input text verbatim without omission or alteration. Flag contradictions inline with detailed comments. Do not condense, shorten, or enhance unless explicitly requested.
-  - `'flag'`: Preserve input text but flag contradictions inline. Allow minor improvements for truth enhancement.
-  - `'edit'`: Allow full editing, reorganization, and enhancement for truth and coherence. Preserve core facts but refine as needed.
-- **fullContent**: Legacy flag (default: true) - maps to 'preserve' mode
-- **fullContentRedactOnly**: Legacy sub-flag (default: false) - for selective editing in preserve mode
-
-### Benchmarking
-1. Go to Benchmark page
-2. Configure queries and parameters
-3. Run benchmark with game theory enabled
-4. View results in Results > Benchmarks tab
-5. Compare eIQ, TLPO, and Nash equilibrium rates
-6. Analyze game-specific performance metrics
-
-### Managing Defaults
-- Use the Defaults page to create, edit, delete custom virtue sets
-- Save successful configurations as presets
-- Load presets in the Dashboard for consistent results
-
-### Generic Trials Dashboard
-1. Navigate to the Trials page (`/trials`)
-2. View all available trial data in a unified interface
-3. Each trial displays:
-   - Trial metadata (type, date, parameters)
-   - Analysis sections (configurable based on trial format)
-   - Raw JSON data viewer
-   - Statistical visualizations
-4. Supports any trial format including ARCHER-1.0, longitudinal studies, and A/B tests
-5. Export trial data for external analysis
-
-### ARCHER-1.0 Intelligence Enhancement Trials
-1. Access ARCHER trials through the Trials dashboard
-2. View intelligence enhancement results across multiple domains:
-   - Marital intimacy and relational intelligence
-   - Ethical reasoning and virtue development
-   - Metaphysical understanding and Thomistic principles
-   - Game theory applications and strategic thinking
-3. Analyze pre/post-trial intelligence metrics (eIQ, TLPO, virtue profiles)
-4. Compare results across different virtue training regimens
-5. Track longitudinal development of enhanced intelligence
-
-### Reasoning Excellence Persistence (ARCHER-1.0)
-The system includes a comprehensive PostgreSQL-backed reasoning excellence tracking system that enables long-term AI self-improvement while maintaining Thomistic epistemological safeguards.
-
-#### Features
-- **Thomistic Reasoning Excellence**: Three-tier adjustment system (habitual, circumstantial, corrective) grounded in classical virtue ethics as reasoning excellence
-- **PostgreSQL Persistence**: Full database tracking of reasoning development across sessions with performance-optimized indexing
-- **Epistemological Safeguards**: Prevents reasoning manipulation while enabling genuine excellence through habitual practice
-- **Multi-Agent Tracking**: Independent reasoning evolution for Generator, Verifier, and Arbiter agents
-- **Performance Correlation**: Links reasoning adjustments to game theory applications and Nash equilibrium events
-
-#### Reasoning Adjustment Tiers
-1. **Habitual Development** (Primary): Reasoning excellence growth through repeated practice and convergence
-2. **Circumstantial Expression** (Secondary): No value changes - contextual adaptation without permanent alteration
-3. **Corrective Adjustment** (Tertiary): Temporary corrections for fundamental reasoning errors
-
-#### Database Schema
-```sql
-CREATE TABLE virtue_evolution (
-    id SERIAL PRIMARY KEY,
-    session_id VARCHAR(255) NOT NULL,
-    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    agent_role VARCHAR(50) NOT NULL, -- generator/verifier/arbiter
-    virtue_name VARCHAR(10) NOT NULL, -- Ω, P, J, F, T, L, V, H
-    value_before DECIMAL(3,2) NOT NULL,
-    adjustment DECIMAL(4,3) NOT NULL,
-    value_after DECIMAL(3,2) NOT NULL,
-    trigger_event VARCHAR(100) NOT NULL,
-    trigger_context TEXT,
-    query_context TEXT,
-    thomistic_validation TEXT
-);
+CONVERGE when: "No refutation."
 ```
 
-#### API Endpoints
-- `GET /virtue-evolution/{session_id}` - Retrieve full virtue evolution history
-- `GET /virtue-evolution/{session_id}/current-state` - Get current virtue values for all agents
-- `GET /virtue-evolution/{session_id}/analysis` - Analyze virtue development patterns
+#### **3.3 `tlpo_tcmve.json`**
+**TLPO v1.2** — 30 flags (24 LLM + 6 TCMVE diagnostics).
+- Used for **LLM config** and **post-convergence scoring**
+- Includes `thomistic_link`, `weight`, `tcmve_recommendation`
 
-#### Integration
-Reasoning adjustments are automatically recorded during:
-- Game theory applications
-- Nash equilibrium detection
-- Convergence events
-- Self-refinement cycles
-- ARCHER intelligence enhancement trials
+#### **3.4 `tlpo_markup_schema_v1.2.xml`**
+**XML Schema** — Validates output.
+- Requires **exactly 30 `<flag>`** with `<generator>`, `<verifier>`, `<arbiter>`
+- Run validation:
+  ```bash
+  xmllint --schema tlpo_markup_schema_v1.2.xml results/medicine.xml --noout
+  ```
 
-This system ensures ARCHER can develop genuine intelligence improvements while maintaining epistemological excellence grounded in Thomistic metaphysics.
+#### **3.5 `main.tex`**
+**IEEE Paper** — Full draft with proofs, plots, 6 demos.
+Compile with `pdflatex`.
 
-## API Reference
+#### **3.6 `tcmve_scoring.py`**
+**Optional** — Advanced TLPO analysis.
+- Compute weighted TQI/TCS
+- Use in custom scripts
 
-### POST /run
-Run a TCMVE query with game theory.
-
-**Request Body**:
-```json
-{
-  "query": "A father-son dilemma requiring Thomistic analysis",
-  "virtues": {
-    "generator": [0.85, 0.72, 0.68, 0.59, 0.41, 0.37, 0.23, 0.10],
-    "verifier": [0.71, 0.65, 0.54, 0.48, 0.32, 0.29, 0.17, 0.05],
-    "arbiter": [0.92, 0.88, 0.79, 0.67, 0.55, 0.44, 0.31, 0.20]
-  },
-  "flags": {
-    "nashMode": "auto",
-    "gameMode": "all",
-    "selfRefine": true,
-    "viceCheck": true,
-    "maritalFreedom": false,
-    "eiqLevel": 15,
-    "simulatedPersons": 30,
-    "output": "test_output"
-  }
-}
+#### **3.7 `requirements.txt`**
+```txt
+langchain-openai
+langchain-anthropic
+langchain-groq
+python-dotenv
 ```
 
-**Response**:
-```json
-{
-  "query": "A father-son dilemma requiring Thomistic analysis",
-  "final_answer": "...",
-  "eIQ": 142.5,
-  "TLPO": 0.978,
-  "nash_equilibrium": "cooperative_equilibrium",
-  "games_applied": ["prisoner", "auction", "stackelberg"],
-  "virtue_adjustments": {...},
-  "converged": true,
-  "rounds": 3
-}
+#### **3.8 `references.bib`**
+BibTeX for `main.tex` (ACC/AHA, GDPR, etc.)
+
+---
+
+### **4. Usage**
+
+#### **Basic**
+```python
+from tcmve import TCMVE
+tcmve = TCMVE()
+result = tcmve.run("IV furosemide dose in acute HF?")
+print(result["tlpo_markup"])
 ```
 
-### GET /export/run/{id}/md
-Export a run result as Markdown.
-
-### GET /export/run/{id}/pdf
-Export a run result as PDF.
-
-### WebSocket /ws/logs
-Receive real-time logs during processing.
-
-**Message Format**:
-```json
-{
-  "logs": ["Log message 1", "Log message 2"]
-}
-```
-
-### GET /trials
-Retrieve a list of all available trial files.
-
-**Response**:
-```json
-[
-  {
-    "filename": "ARCHER-1_0_MARITAL_INTIMACY_WIFE_S_VIEW_OF_HUSBAND_S_AROUS.xml",
-    "trial_type": "archer",
-    "date": "2025-01-15"
-  },
-  {
-    "filename": "longitudinal_study_2025_Q1.json",
-    "trial_type": "longitudinal",
-    "date": "2025-01-20"
-  }
-]
-```
-
-### GET /trials/{filename}
-Retrieve detailed data for a specific trial.
-
-**Parameters**:
-- `filename`: The trial filename (with extension)
-
-**Response**: Trial data in JSON format (varies by trial type)
-```json
-{
-  "trial_type": "archer",
-  "metadata": {
-    "date": "2025-01-15",
-    "version": "1.0",
-    "domain": "marital_intimacy"
-  },
-  "analysis": {
-    "pre_trial_eiq": 0.85,
-    "post_trial_eiq": 0.92,
-    "virtue_improvements": {...},
-    "statistical_significance": 0.95
-  },
-  "raw_data": {...}
-}
-```
-
-### Reasoning Excellence API
-
-#### GET /reasoning-excellence/{session_id}
-Retrieve full reasoning excellence evolution history for a session.
-
-**Parameters**:
-- `session_id`: Unique session identifier
-- `agent_role` (optional): Filter by agent role (generator/verifier/arbiter)
-- `virtue_name` (optional): Filter by virtue (Ω, P, J, F, T, L, V, H)
-- `limit` (optional): Maximum number of records to return (default: 100)
-
-**Response**:
-```json
-{
-  "evolution": [
-    {
-      "id": 1,
-      "session_id": "session_123",
-      "timestamp": "2025-11-21T00:01:35",
-      "agent_role": "generator",
-      "virtue_name": "P",
-      "value_before": 0.70,
-      "adjustment": 0.024,
-      "value_after": 0.724,
-      "trigger_event": "game_prisoner",
-      "trigger_context": "{\"game_result\": \"cooperative\"}",
-      "query_context": "Truth verification query",
-      "thomistic_validation": "Prudence increase through wise analytical practice"
-    }
-  ]
-}
-```
-
-#### GET /reasoning-excellence/{session_id}/current-state
-Get current reasoning excellence values for all agents in a session.
-
-**Parameters**:
-- `session_id`: Unique session identifier
-
-**Response**:
-```json
-{
-  "current_state": {
-    "generator": {
-      "Ω": 0.52,
-      "P": 0.72,
-      "J": 0.62
-    },
-    "verifier": {
-      "Ω": 0.52,
-      "P": 0.72,
-      "J": 0.62
-    },
-    "arbiter": {
-      "Ω": 0.52,
-      "P": 0.72,
-      "J": 0.62
-    }
-  }
-}
-```
-
-#### GET /reasoning-excellence/{session_id}/analysis
-Analyze reasoning excellence development patterns for a session.
-
-**Parameters**:
-- `session_id`: Unique session identifier
-- `agent_role` (optional): Filter by agent role
-
-**Response**:
-```json
-{
-  "analysis": {
-    "Ω": {
-      "adjustment_count": 3,
-      "avg_adjustment": 0.017,
-      "positive_adjustments": 3,
-      "negative_adjustments": 0,
-      "min_value": 0.50,
-      "max_value": 0.52,
-      "net_change": 0.020
-    }
-  }
-}
-```
-
-## Configuration
-
-### Flags
-- `--self-refine`: Enable self-refinement cycles
-- `--vice-check`: Include vice calculation
-- `--marital-freedom`: Allow full Song-of-Songs mode
-- `--game`: Play Nash game (prisoner, auction, etc.)
-- `--gamemode`: Game selection mode (dynamic/rule-based, embedding/semantic, all, separate)
-- `--content-preservation-mode`: Content handling mode ('preserve' for full fidelity, 'flag' for inline flagging, 'edit' for full refinement)
-- **LLM Providers**: Configurable per role (Generator/Verifier/Arbiter) via UI or API
-
-### TLPO Lethal Threshold System
-- **Sole Referee**: TLPO is now the only lethal truth evaluator (replaces local_veracity_referee)
-- **Lethal Threshold**: TQI < 0.70 triggers immediate virtue collapse (V=0.0, Ω=99.9)
-- **No Appeals**: Once triggered, virtue collapse is permanent for that round
-- **33-Flag Ontology**: Comprehensive Thomistic evaluation including advanced concepts:
-  - Actus Essendi Scale (essence/existence distinction)
-  - Transcendental Convertibility (being→one→truth→good→beauty)
-  - Analogy Predication (proportional participation in divine archetypes)
-- **Embedded Cosine Similarity**: Fully implemented semantic evaluation using OpenAI text-embedding-3-large for direct comparison against ideal Thomistic metaphysical analysis
-
-### Sermon on the Mount 33-Flag Ontology
-The system includes a complete biblical foundation for the TLPO framework through the Sermon on the Mount ontology (`backend/tcmve_imutable_core_sermon.py`):
-
-- **33 Flags Mapped**: Each TLPO parameter is mapped to specific verses from Matthew 5-7
-- **Biblical Categories**:
-  - Beatitudes (Matthew 5:3-10): Eight foundational blessings mapping to basic parameters
-  - Antitheses (Matthew 5:21-48): Six radical teachings on law fulfillment
-  - Lord's Prayer & Treasures (Matthew 6): Prayer and heavenly focus
-  - Judgment & Authority (Matthew 7): Final teachings on discernment and teaching authority
-- **Thomistic Integration**: Each mapping includes metaphysical analysis connecting biblical principles to AI parameters
-- **Scriptural Completeness**: Covers the entire Sermon (Matthew 5:1–7:29) without arbitrary omissions
-- **Metaphysical Depth**: Provides scriptural grounding for AI truth-seeking through Christ's teachings
-
-This ontology serves as the immutable scriptural foundation for TCMVE's Thomistic AI parameters, ensuring biblical coherence in metaphysical evaluation.
-
-### Environment Variables
-All three API keys are required for the system to function with any provider:
-- `OPENAI_API_KEY`: OpenAI API key (default provider)
-- `ANTHROPIC_API_KEY`: Anthropic (Claude) API key
-- `XAI_API_KEY`: xAI (Grok) API key
-
-### API Robustness Configuration
-The system includes enterprise-grade reliability features:
-- **Retry Logic**: Automatic retries with exponential backoff (configurable max_retries, retry_delay)
-- **Provider Fallback**: Automatic failover to alternative LLM providers when primary fails
-- **Provider Chains**: Configurable fallback sequences (e.g., OpenAI → Anthropic → xAI/Grok)
-- **Error Handling**: Comprehensive error categorization and recovery strategies
-- **Rate Limiting**: Built-in rate limiting with intelligent backoff
-
-## Development
-
-### Project Structure
-```
-tcmve/
-├── backend/
-│   ├── tcmve.py          # Core engine with enhanced LLM robustness
-│   ├── benchmark.py      # Benchmarking suite
-│   ├── archer_trial.py   # ARCHER-1.0 intelligence enhancement trials
-│   ├── api/              # FastAPI backend with trial endpoints
-│   ├── games/            # Nash game implementations
-│   ├── results/          # Trial data (XML/JSON outputs)
-│   └── demos/            # Demonstration scripts
-├── frontend/             # Next.js dashboard with trials page
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── trials/   # Generic trials dashboard
-│   │   │   └── dashboard/ # Main TCMVE interface
-│   │   └── lib/          # API clients and utilities
-├── api/                  # FastAPI application
-├── public/               # Static assets
-└── tests/                # Unit tests
-```
-
-### Running Tests
+#### **Demos**
 ```bash
-cd src && python -m pytest tests/
+./demos/run_all_demos.sh
 ```
 
-### Building Frontend
-```bash
-cd frontend && npm run build
-```
+---
 
-## Contributing
+### **5. Customization**
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
+- **Max Rounds**: `TCMVE(max_rounds=10)`
+- **LLM Swap**: Edit `tlpo_tcmve.json` → `arbiter_settings`
+- **New Flags**: Add to `tlpo_tcmve.json` → update scoring
 
-### Areas for Contribution
-- Additional LLM providers and provider chains
-- New Nash games and game theory frameworks
-- Trial format extensions (longitudinal studies, A/B tests, multi-round experiments)
-- Enhanced statistical analysis and visualization
-- API robustness improvements and monitoring
-- UI/UX improvements for trials dashboard
-- Performance optimizations
-- Documentation and research integration
+---
 
-## License
+### **6. Troubleshooting**
 
-MIT License - see LICENSE file for details.
+| Issue | Fix |
+|------|-----|
+| `FileNotFound` | Check file names |
+| `API Error` | Verify `.env` |
+| `No convergence` | Increase `max_rounds` |
+| `XML invalid` | Run `xmllint` |
 
-## Citation
+---
 
-If you use TCMVE in research, please cite:
+### **7. Best Practices**
 
-```
-@software{tcmve2025,
-  title={nTGT-Ω: Thomistic Truth Engine},
-  author={Diestel, Eckhart},
-  year={2025},
-  url={https://github.com/ediestel/tcmve}
-}
-```
+- Use `.env`
+- Monitor API costs
+- Validate XML output
+- Cite: `@ECKHART_DIESTEL (2025)`
 
-## Support
+---
 
-- **Issues**: GitHub Issues
-- **Discussions**: GitHub Discussions
-- **Email**: eckhart.diestel@example.com
-
-**"Ad maiorem Dei gloriam"**
+**End of Manual**
