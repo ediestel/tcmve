@@ -143,7 +143,9 @@ class LLMClient:
         elif self.provider == "xai":
             return "https://api.x.ai/v1/chat/completions"
         elif self.provider == "ollama":
-            return "http://localhost:11434/v1/chat/completions"
+            # Allow configurable Ollama host for remote instances
+            ollama_host = os.getenv("OLLAMA_HOST", "localhost")
+            return f"http://{ollama_host}:11434/v1/chat/completions"
         else:
             raise ValueError(f"Unsupported provider: {self.provider}")
 
@@ -280,7 +282,7 @@ class LLMClient:
             api_key = os.getenv("XAI_API_KEY")
             model = "grok-4-fast-reasoning"
         elif provider == "ollama":
-            api_key = "ollama"  # dummy
+            api_key = os.getenv("OLLAMA_API_KEY", "ollama")  # Allow custom API key, default to dummy
             model = "llama3.2"
         else:
             raise ValueError(f"Unsupported provider: {provider}")
