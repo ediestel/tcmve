@@ -246,6 +246,11 @@ class LLMClient:
         if not api_key and provider != "ollama":
             raise RuntimeError(f"Missing API key for {provider}")
 
+        # Cap max_tokens for OpenAI fallback
+        temp_max_tokens = self.max_tokens
+        if provider == "openai":
+            temp_max_tokens = min(temp_max_tokens, 4096)
+
         # Create temporary client with same settings
         temp_client = LLMClient(
             provider=provider,
@@ -253,7 +258,7 @@ class LLMClient:
             api_key=api_key,
             temperature=self.temperature,
             top_p=self.top_p,
-            max_tokens=self.max_tokens,
+            max_tokens=temp_max_tokens,
             presence_penalty=self.presence_penalty,
             frequency_penalty=self.frequency_penalty,
             cache_enabled=False,  # Disable cache for fallback attempts
@@ -583,13 +588,13 @@ class TCMVE:
         cfg = self.tlpo["tcmve_integration"][f"{role}_settings"]
         provider_map = {
             "generator": (
+                "XAI_API_KEY",
+                "xai",
+                "grok-4-fast-reasoning"),
+            "verifier": (
                 "OPENAI_API_KEY",
                 "openai",
                 "gpt-4o"),
-            "verifier": (
-                "ANTHROPIC_API_KEY",
-                "anthropic",
-                "claude-3-opus-20240229"),
             "arbiter": (
                 "XAI_API_KEY",
                 "xai",
@@ -632,13 +637,16 @@ class TCMVE:
 
         # Use dynamic overrides if available
         dynamic = self.dynamic_cfg.get(role, {})
+        max_tokens = dynamic.get("max_new_tokens", cfg.get("max_new_tokens", 32768))
+        if provider == "openai":
+            max_tokens = min(max_tokens, 16384)  # OpenAI GPT-4o supports up to 16384 completion tokens
         client = LLMClient(
             provider=provider,
             model=model,
             api_key=api_key,
             temperature=dynamic.get("temperature", cfg.get("temperature", 0.0)),
             top_p=dynamic.get("top_p", cfg.get("top_p", 1.0)),
-            max_tokens=dynamic.get("max_new_tokens", cfg.get("max_new_tokens", 32768)),
+            max_tokens=max_tokens,
             presence_penalty=dynamic.get("presence_penalty", cfg.get("repetition_penalty", 1.1)),
             frequency_penalty=dynamic.get("frequency_penalty", cfg.get("repetition_penalty", 1.1)),
             cache_enabled=self.cache_enabled,
@@ -940,6 +948,25 @@ class TCMVE:
         self.args = args  # Update args for client building
         logger.info(f"Engine flags: {vars(args) if args else {}}")
 
+        # Detect editing tasks and disable arbiter for direct edit output
+        if any(keyword in query.lower() for keyword in ["edit", "draft", "reorganize", "revise"]):
+            setattr(args, 'use_arbiter', False)
+            logger.info("Editing task detected: disabling arbiter for direct edit output")
+
+        # Content preservation mode: Configurable preservation, flagging, or editing
+        preservation_mode = getattr(args, 'contentpreservationmode', 'preserve')  # Options: 'preserve', 'flag', 'edit'
+        if preservation_mode == 'preserve':
+            self.system_prompt += "\n\n## FULL PRESERVATION MODE\n- The query contains the text to edit; produce the edited version as your final answer, incorporating all facts from the input text\n- Preserve core content and facts without arbitrary omission; apply only requested changes (e.g., reorganization, remove verbatim redundancies, enhance spiciness)\n- Flag any contradictions inline with detailed comments (e.g., <!-- TLPO Flag: Metaphysical contradiction in essence - review charity/freedom balance -->)\n- Do not condense, shorten, or enhance beyond what is explicitly requested in the query\n- Maintain original style, structure, and prose where possible"
+        elif preservation_mode == 'flag':
+            self.system_prompt += "\n\n## FLAG-ONLY MODE\n- Preserve input text but flag contradictions inline\n- Allow minor improvements (e.g., flow, redundancies) if they enhance truth\n- Flag issues like: <!-- TLPO Flag: [description] -->\n- Balance preservation with Thomistic refinement"
+        elif preservation_mode == 'edit':
+            self.system_prompt += "\n\n## EDITING MODE\n- Allow full editing, reorganization, and enhancement for truth and coherence\n- Preserve core facts but refine style, structure, and content as needed\n- Omit redundancies or tangential elements if they don't contribute to the final cause"
+        # Legacy fullcontent flags for backward compatibility
+        if hasattr(args, 'fullcontent') and getattr(args, 'fullcontent', False):
+            preservation_mode = 'preserve'
+            if hasattr(args, 'fullcontentredactonly') and getattr(args, 'fullcontentredactonly', False):
+                self.system_prompt += "\n- REDACT-ONLY SUB-MODE: Apply only user-requested edits; skip all unsolicited flagging or enhancements"
+
         # Initialize LLM clients from TLPO settings with args
         self.generator = self._build_client("generator")
         self.verifier = self._build_client("verifier")
@@ -1046,13 +1073,13 @@ class TCMVE:
                 # TLPO is now the SOLE referee - lethal threshold enforcement
                 tlpo_scores = self._evaluate_with_tlpo(proposition, query)
 
-                # LETHAL TLPO THRESHOLD: < 0.70 = immediate virtue collapse
+                # ADVISORY TLPO THRESHOLD: < 0.50 = virtue adjustment (less severe)
                 weighted_tqi = tlpo_scores.get("weighted_tqi", 0.0)
-                if weighted_tqi < 0.70:
-                    logger.critical(f"←←← TLPO EXECUTION: Generator proposition TQI {weighted_tqi:.3f} < 0.70 threshold")
-                    self.virtue_vectors["generator"]["V"] = 0.0
-                    self.virtue_vectors["generator"]["Ω"] = 99.9
-                    # Continue but with collapsed virtues - system will naturally penalize
+                if weighted_tqi < 0.50:
+                    logger.warning(f"TLPO WARNING: Generator proposition TQI {weighted_tqi:.3f} < 0.50 threshold - adjusting virtues")
+                    self.virtue_vectors["generator"]["V"] *= 0.8  # Reduce by 20% instead of collapse
+                    self.virtue_vectors["generator"]["Ω"] += 10  # Increase humility moderately
+                    # Continue with adjusted virtues
 
                 self._update_llm_parameters(tlpo_scores)
                 # Rebuild clients with updated parameters for next iterations
@@ -1078,13 +1105,13 @@ class TCMVE:
                     refutation = f"[VERIFIER ERROR: {e}]"
                     self.add_log(refutation)
 
-                # TLPO lethal threshold for verifier refutation
+                # TLPO advisory threshold for verifier refutation
                 verifier_tlpo_scores = self._evaluate_with_tlpo(refutation, query)
                 verifier_tqi = verifier_tlpo_scores.get("weighted_tqi", 0.0)
-                if verifier_tqi < 0.70:
-                    logger.critical(f"←←← TLPO EXECUTION: Verifier refutation TQI {verifier_tqi:.3f} < 0.70 threshold")
-                    self.virtue_vectors["verifier"]["V"] = 0.0
-                    self.virtue_vectors["verifier"]["Ω"] = 99.9
+                if verifier_tqi < 0.50:
+                    logger.warning(f"TLPO WARNING: Verifier refutation TQI {verifier_tqi:.3f} < 0.50 threshold - adjusting virtues")
+                    self.virtue_vectors["verifier"]["V"] *= 0.8
+                    self.virtue_vectors["verifier"]["Ω"] += 10
 
                 round_data["refutation"] = refutation
                 messages.extend([{"role": "user", "content": ver_input}, {
@@ -1366,6 +1393,20 @@ class TCMVE:
 
         # === TLPO Scoring (already computed above with lethal threshold) ===
         metrics = self._compute_metrics(history)
+
+        # Add feedback summary based on preservation mode
+        preservation_mode = getattr(args, 'contentpreservationmode', 'preserve')
+        if preservation_mode in ['preserve', 'flag'] or (hasattr(args, 'fullcontent') and getattr(args, 'fullcontent', False)):
+            word_count = len(final_answer.split())
+            flagged_count = final_answer.count('<!-- TLPO Flag:')
+            mode_desc = {
+                'preserve': 'Full Content Preservation',
+                'flag': 'Flag-Only Mode',
+                'edit': 'Editing Mode'
+            }.get(preservation_mode, 'Unknown Mode')
+            summary = f"\n\n---\n**TCMVE Feedback Summary**\n- Content Preserved: {word_count} words\n- Flagged Issues: {flagged_count}\n- TQI: {final_tlpo_scores.get('weighted_tqi', 'N/A')}\n- Mode: {mode_desc}\n---"
+            final_answer += summary
+            result["final_answer"] = final_answer
 
         result["tlpo_scores"] = final_tlpo_scores
         result["tlpo_markup"] = self._generate_tlpo_markup(
