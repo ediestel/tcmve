@@ -71,15 +71,26 @@ tcmve
 
 #### **Step 3: Install Dependencies**
 ```bash
-pip install -r requirements.txt
+# Option 1: Install from setup.py (recommended)
+pip install -e .
+
+# Option 2: Install from requirements.txt
+pip install -r backend/requirements.txt
 ```
 
-`requirements.txt`:
+`backend/requirements.txt`:
 ```txt
-langchain-openai
-langchain-anthropic
-langchain-groq
-python-dotenv
+python-dotenv>=1.0.0
+fastapi==0.115.4
+uvicorn==0.32.0
+python-multipart==0.0.12
+pydantic==2.9.2
+chromadb==1.3.4
+openai==2.8.0
+tiktoken==0.7.0
+psycopg2-binary==2.9.9
+cachetools==5.3.3
+redis==5.0.8
 ```
 
 #### **Step 4: Add API Keys**
