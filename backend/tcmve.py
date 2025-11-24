@@ -108,6 +108,7 @@ class LLMClient:
         fallback_providers: Optional[List[ProviderType]] = None,
         max_retries: int = 3,
         retry_delay: float = 1.0,
+        prefix_cache_enabled: bool = True,
     ):
         self.provider = provider
         self.model = model
@@ -124,6 +125,12 @@ class LLMClient:
         self.fallback_providers = fallback_providers or []
         self.max_retries = max_retries
         self.retry_delay = retry_delay
+
+        # Prefix caching for system prompts
+        self.prefix_cache_enabled = prefix_cache_enabled
+        self._conversation_history: List[Dict[str, str]] = []
+        self._system_prompt_cached = False
+        self._max_conversation_length = 50  # Prevent excessive memory usage
 
         self.base_url = self._get_base_url()
         self.headers = self._get_headers()
@@ -159,7 +166,7 @@ class LLMClient:
                stream: bool = True) -> str:
         """
         Send messages to the LLM and return the assistant's response content.
-        Features: Retry logic, provider fallback, robust error handling.
+        Features: Retry logic, provider fallback, robust error handling, prefix caching.
         If stream=True and token_callback exists → streams tokens live.
         If stream=False → returns full response at once (safe for TLPO).
         """
@@ -168,10 +175,39 @@ class LLMClient:
         import json
         import time
 
-        # Cache key
+        # Handle prefix caching: maintain persistent conversation with system prompt
+        if self.prefix_cache_enabled:
+            # Cache system message on first use
+            if messages and messages[0].get("role") == "system" and not self._system_prompt_cached:
+                self._conversation_history.append(messages[0])
+                self._system_prompt_cached = True
+
+            # Add all messages from this call to conversation history
+            for msg in messages:
+                if not (msg.get("role") == "system" and self._system_prompt_cached):
+                    # Skip system messages if already cached
+                    self._conversation_history.append(msg)
+
+            # Trim conversation history if it gets too long (keep system message + recent messages)
+            if len(self._conversation_history) > self._max_conversation_length:
+                # Always keep the system message at the beginning
+                system_msg = None
+                if self._conversation_history and self._conversation_history[0].get("role") == "system":
+                    system_msg = self._conversation_history[0]
+
+                # Keep the most recent messages
+                recent_messages = self._conversation_history[-self._max_conversation_length+1:]
+                self._conversation_history = [system_msg] + recent_messages if system_msg else recent_messages
+
+            conversation_messages = self._conversation_history.copy()
+        else:
+            # Fallback to original behavior
+            conversation_messages = messages
+
+        # Cache key (use full conversation for uniqueness)
         cache_key = hashlib.md5(
             json.dumps(
-                messages,
+                conversation_messages,
                 sort_keys=True).encode()).hexdigest()
         if self._response_cache is not None and cache_key in self._response_cache:
             logger.info("Cache hit for LLM response")
@@ -195,7 +231,7 @@ class LLMClient:
             for retry in range(self.max_retries):
                 try:
                     # Build payload for this provider
-                    payload = self._build_payload(messages, stream, attempt_provider)
+                    payload = self._build_payload(conversation_messages, stream, attempt_provider)
 
                     if stream and self.token_callback and attempt_provider in [
                             "openai", "xai", "anthropic", "ollama"]:
@@ -224,6 +260,12 @@ class LLMClient:
         error_msg = f"All LLM providers failed. Last error: {last_error}"
         logger.error(error_msg)
         raise RuntimeError(error_msg) from last_error
+
+    def reset_conversation(self):
+        """Reset the conversation history for prefix caching."""
+        self._conversation_history = []
+        self._system_prompt_cached = False
+        logger.info("Conversation history reset for prefix caching")
 
     def _create_attempt_client(self, provider: ProviderType) -> 'LLMClient':
         """Create a temporary client for this provider attempt."""
@@ -653,6 +695,7 @@ class TCMVE:
             fallback_providers=fallback_chains.get(provider, []),
             max_retries=3,
             retry_delay=1.0,
+            prefix_cache_enabled=True,  # Enable prefix caching for system prompt optimization
         )
         client.token_callback = self.token_callback
         return client
