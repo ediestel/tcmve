@@ -28,6 +28,7 @@ A comprehensive truth verification system combining:
 - **TLPO Lethal Threshold**: TQI < 0.70 triggers immediate virtue collapse (V=0.0, Ω=99.9) - no appeals
 - **Embedded Cosine Similarity TLPO**: Pure semantic evaluation using OpenAI text-embedding-3-large against ideal Thomistic metaphysical analysis
 - **Embedding-Based Game Selection**: Semantic similarity matching for optimal game application (OpenAI text-embedding-3-large)
+- **Sermon on the Mount 33-Flag Ontology**: Complete mapping of all 33 TLPO flags to biblical passages from Matthew 5-7, providing scriptural foundation for Thomistic AI parameters
 - **Real-Time Feedback**: WebSocket-powered live logs during processing
 - **Comparative Benchmarking**: Side-by-side analysis of runs and benchmark suites
 - **Generic Trials Dashboard**: Universal research platform supporting any trial format (ARCHER, longitudinal studies, A/B tests)
@@ -393,6 +394,15 @@ Each agent has 8 virtues scaled 0.00-1.00:
 - **High F**: Boosts debate persistence
 - **High L**: Enhances relational intelligence
 
+#### Content Preservation Settings
+
+- **contentPreservationMode**: Controls how input text is handled (default: 'preserve')
+  - `'preserve'`: Preserve ALL input text verbatim without omission or alteration. Flag contradictions inline with detailed comments. Do not condense, shorten, or enhance unless explicitly requested.
+  - `'flag'`: Preserve input text but flag contradictions inline. Allow minor improvements for truth enhancement.
+  - `'edit'`: Allow full editing, reorganization, and enhancement for truth and coherence. Preserve core facts but refine as needed.
+- **fullContent**: Legacy flag (default: true) - maps to 'preserve' mode
+- **fullContentRedactOnly**: Legacy sub-flag (default: false) - for selective editing in preserve mode
+
 ### Benchmarking
 1. Go to Benchmark page
 2. Configure queries and parameters
@@ -672,6 +682,7 @@ Analyze reasoning excellence development patterns for a session.
 - `--marital-freedom`: Allow full Song-of-Songs mode
 - `--game`: Play Nash game (prisoner, auction, etc.)
 - `--gamemode`: Game selection mode (dynamic/rule-based, embedding/semantic, all, separate)
+- `--content-preservation-mode`: Content handling mode ('preserve' for full fidelity, 'flag' for inline flagging, 'edit' for full refinement)
 - **LLM Providers**: Configurable per role (Generator/Verifier/Arbiter) via UI or API
 
 ### TLPO Lethal Threshold System
@@ -683,6 +694,21 @@ Analyze reasoning excellence development patterns for a session.
   - Transcendental Convertibility (being→one→truth→good→beauty)
   - Analogy Predication (proportional participation in divine archetypes)
 - **Embedded Cosine Similarity**: Fully implemented semantic evaluation using OpenAI text-embedding-3-large for direct comparison against ideal Thomistic metaphysical analysis
+
+### Sermon on the Mount 33-Flag Ontology
+The system includes a complete biblical foundation for the TLPO framework through the Sermon on the Mount ontology (`backend/tcmve_imutable_core_sermon.py`):
+
+- **33 Flags Mapped**: Each TLPO parameter is mapped to specific verses from Matthew 5-7
+- **Biblical Categories**:
+  - Beatitudes (Matthew 5:3-10): Eight foundational blessings mapping to basic parameters
+  - Antitheses (Matthew 5:21-48): Six radical teachings on law fulfillment
+  - Lord's Prayer & Treasures (Matthew 6): Prayer and heavenly focus
+  - Judgment & Authority (Matthew 7): Final teachings on discernment and teaching authority
+- **Thomistic Integration**: Each mapping includes metaphysical analysis connecting biblical principles to AI parameters
+- **Scriptural Completeness**: Covers the entire Sermon (Matthew 5:1–7:29) without arbitrary omissions
+- **Metaphysical Depth**: Provides scriptural grounding for AI truth-seeking through Christ's teachings
+
+This ontology serves as the immutable scriptural foundation for TCMVE's Thomistic AI parameters, ensuring biblical coherence in metaphysical evaluation.
 
 ### Environment Variables
 All three API keys are required for the system to function with any provider:
