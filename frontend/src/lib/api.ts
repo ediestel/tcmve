@@ -1,6 +1,6 @@
 // src/lib/api.ts — FINAL, PERFECT, NO HARDCODED URLS, WORKS 100%
 
-import type { TCMVEConfig, DefaultsResponse, RunQueryPayload, BenchmarkPayload } from './types';
+import type { TCMVEConfig, DefaultsResponse, RunQueryPayload, BenchmarkPayload, Virtues } from './types';
 
 const API_BASE = typeof window !== 'undefined'
   ? (process.env.NEXT_PUBLIC_API_BASE || '/api')
@@ -82,6 +82,32 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
     });
     if (!res.ok) throw new Error('Failed to apply preset');
+    return res.json();
+  },
+
+  async createPreset(data: { name: string; description: string; virtue_vectors: { generator: Virtues; verifier: Virtues; arbiter: Virtues }; recommended_games: string[]; use_case: string }) {
+    const res = await fetch(`${API_BASE}/presets`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Failed to create preset');
+    return res.json();
+  },
+
+  async updatePreset(presetName: string, data: { description: string; virtue_vectors: { generator: Virtues; verifier: Virtues; arbiter: Virtues }; recommended_games: string[]; use_case: string }) {
+    const res = await fetch(`${API_BASE}/presets/${presetName}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Failed to update preset');
+    return res.json();
+  },
+
+  async deletePreset(presetName: string) {
+    const res = await fetch(`${API_BASE}/presets/${presetName}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('Failed to delete preset');
     return res.json();
   },
 

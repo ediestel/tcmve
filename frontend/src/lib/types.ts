@@ -172,9 +172,9 @@ export interface TCMVEFlags {
   meanBiq: number;
   sigmaBiq: number;
   output: string;
-  generatorProvider: 'openai' | 'anthropic' | 'xai' | 'ollama';
-  verifierProvider: 'openai' | 'anthropic' | 'xai' | 'ollama';
-  arbiterProvider: 'openai' | 'anthropic' | 'xai' | 'ollama';
+  generatorProvider: 'openai' | 'anthropic' | 'xai' | 'ollama_1' | 'ollama_2' | 'ollama_3';
+  verifierProvider: 'openai' | 'anthropic' | 'xai' | 'ollama_1' | 'ollama_2' | 'ollama_3';
+  arbiterProvider: 'openai' | 'anthropic' | 'xai' | 'ollama_1' | 'ollama_2' | 'ollama_3';
   streammode?: string;
 }
 
@@ -189,6 +189,7 @@ export interface RunQueryPayload {
   flags?: Partial<TCMVEFlags>;
   gameMode?: 'all' | 'separate' | 'recommended_set' | 'arbiterOnly';
   selectedGame?: string;
+  selectedSetId?: number;
   session_id?: string;
 }
 

@@ -307,6 +307,106 @@ def load_preset_from_database(preset_name: str) -> Dict[str, Any]:
     finally:
         conn.close()
 
+def list_presets_db() -> Dict[str, str]:
+    """List all presets from the database."""
+    import psycopg2
+    import os
+    from dotenv import load_dotenv
+    from psycopg2.extras import RealDictCursor
+
+    load_dotenv()
+
+    conn = psycopg2.connect(
+        host=os.getenv("DB_HOST", "localhost"),
+        port=os.getenv("DB_PORT", "5432"),
+        dbname=os.getenv("DB_NAME", "tcmve"),
+        user=os.getenv("DB_USER", "postgres"),
+        password=os.getenv("DB_PASSWORD", "")
+    )
+
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute("SELECT name, description FROM virtue_presets ORDER BY name")
+            rows = cursor.fetchall()
+            return {row['name']: row['description'] for row in rows}
+    finally:
+        conn.close()
+
+def create_preset_db(name: str, description: str, virtue_vectors: Dict[str, Dict[str, float]], recommended_games: list, use_case: str):
+    """Create a new preset in the database."""
+    import psycopg2
+    import os
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
+    conn = psycopg2.connect(
+        host=os.getenv("DB_HOST", "localhost"),
+        port=os.getenv("DB_PORT", "5432"),
+        dbname=os.getenv("DB_NAME", "tcmve"),
+        user=os.getenv("DB_USER", "postgres"),
+        password=os.getenv("DB_PASSWORD", "")
+    )
+
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO virtue_presets (name, description, virtue_vectors, recommended_games, use_case)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (name, description, json.dumps(virtue_vectors), json.dumps(recommended_games), use_case))
+            conn.commit()
+    finally:
+        conn.close()
+
+def update_preset_db(name: str, description: str, virtue_vectors: Dict[str, Dict[str, float]], recommended_games: list, use_case: str):
+    """Update a preset in the database."""
+    import psycopg2
+    import os
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
+    conn = psycopg2.connect(
+        host=os.getenv("DB_HOST", "localhost"),
+        port=os.getenv("DB_PORT", "5432"),
+        dbname=os.getenv("DB_NAME", "tcmve"),
+        user=os.getenv("DB_USER", "postgres"),
+        password=os.getenv("DB_PASSWORD", "")
+    )
+
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                UPDATE virtue_presets SET description = %s, virtue_vectors = %s, recommended_games = %s, use_case = %s, updated_at = NOW()
+                WHERE name = %s
+            """, (description, json.dumps(virtue_vectors), json.dumps(recommended_games), use_case, name))
+            conn.commit()
+    finally:
+        conn.close()
+
+def delete_preset_db(name: str):
+    """Delete a preset from the database."""
+    import psycopg2
+    import os
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
+    conn = psycopg2.connect(
+        host=os.getenv("DB_HOST", "localhost"),
+        port=os.getenv("DB_PORT", "5432"),
+        dbname=os.getenv("DB_NAME", "tcmve"),
+        user=os.getenv("DB_USER", "postgres"),
+        password=os.getenv("DB_PASSWORD", "")
+    )
+
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("DELETE FROM virtue_presets WHERE name = %s", (name,))
+            conn.commit()
+    finally:
+        conn.close()
+
 if __name__ == "__main__":
     # Example usage
     print("Available Virtue Presets:")

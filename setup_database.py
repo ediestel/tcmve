@@ -23,23 +23,9 @@ def create_tables():
         )
 
         with conn.cursor() as cursor:
-            print("Creating database tables...")
+            print("Ensuring database tables exist...")
 
-            # Drop tables if they exist with wrong schema (for development)
-            tables_to_drop = [
-                'recommended_sets', 'virtue_presets', 'game_results_cache', 'user_sessions', 'users',
-                'defaults', 'dashboard_stats', 'resurrection_tokens', 'trials',
-                'benchmarks', 'configs', 'virtue_evolution', 'llm_responses',
-                'cached_results', 'runs', 'game_narratives'
-            ]
-
-            for table in tables_to_drop:
-                try:
-                    cursor.execute(f"DROP TABLE IF EXISTS {table} CASCADE")
-                except Exception as e:
-                    print(f"Warning: Could not drop table {table}: {e}")
-
-            print("Dropped existing tables...")
+            # Tables are created IF NOT EXISTS to preserve existing data
 
             # Main runs table
             cursor.execute("""
@@ -302,6 +288,35 @@ def create_tables():
             """)
             print("✓ Created virtue_presets table")
 
+            # Populate with default recommended sets
+            from backend.virtue_presets import VIRTUE_PRESETS, save_preset_to_database
+            for preset_name in VIRTUE_PRESETS:
+                save_preset_to_database(preset_name)
+            print("✓ Populated virtue_presets table with defaults")
+
+            # Populate default configs
+            cursor.execute("""
+                INSERT INTO configs (id, usegenerator, useverifier, usearbiter, generatorprovider, verifierprovider, arbiterprovider,
+                                     maxrounds, maritalfreedom, vicecheck, selfrefine, streammode, gamemode, selectedgame,
+                                     eiqlevel, simulatedpersons, meanbiq, sigmabiq, tlpofull, noxml, sevendomains, virtuesindependent,
+                                     biqdistribution, output, nashmode)
+                VALUES (1, true, true, true, 'openai', 'anthropic', 'xai', 5, false, true, true, 'arbiter_only', 'dynamic', null,
+                        10, 50, 100, 15, false, false, true, true, 'gaussian', 'result', 'auto')
+                ON CONFLICT (id) DO NOTHING
+            """)
+            print("✓ Inserted default config")
+
+            # Populate default virtues
+            cursor.execute("""
+                INSERT INTO defaults (id, generator, verifier, arbiter)
+                VALUES (1,
+                        '{"Ω": 0.97, "P": 0.8, "J": 0.75, "F": 0.65, "T": 0.85, "V": 0.72, "L": 0.85, "H": 0.89}',
+                        '{"Ω": 0.95, "P": 0.9, "J": 0.95, "F": 0.8, "T": 0.9, "V": 0.65, "L": 0.9, "H": 0.95}',
+                        '{"Ω": 0.95, "P": 0.85, "J": 0.8, "F": 0.9, "T": 0.85, "V": 0.85, "L": 0.8, "H": 0.85}')
+                ON CONFLICT (id) DO NOTHING
+            """)
+            print("✓ Inserted default virtues")
+
             # Recommended sets table
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS recommended_sets (
@@ -317,6 +332,17 @@ def create_tables():
                 CREATE INDEX IF NOT EXISTS idx_recommended_sets_name ON recommended_sets(name);
             """)
             print("✓ Created recommended_sets table")
+
+            # Insert default recommended sets
+            cursor.execute("""
+                INSERT INTO recommended_sets (name, description, games, use_case) VALUES
+                ('Ethics & Morality', 'Games for exploring ethical dilemmas and moral reasoning', '["prisoner", "chicken", "ultimatum"]', 'Ethical decision making'),
+                ('Economic Theory', 'Classic games for economic analysis and market behavior', '["prisoner", "stackelberg", "auction"]', 'Economic modeling'),
+                ('Social Dynamics', 'Games examining social interactions and cooperation', '["prisoner", "stag_hunt", "chicken"]', 'Social behavior analysis'),
+                ('Strategic Competition', 'Games focusing on competitive strategies and outcomes', '["prisoner", "chicken", "evolution"]', 'Strategic analysis')
+                ON CONFLICT (name) DO NOTHING;
+            """)
+            print("✓ Inserted default recommended sets")
 
             # Game narratives embeddings table
             cursor.execute("""

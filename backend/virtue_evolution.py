@@ -289,7 +289,6 @@ class ThomisticVirtueAdjuster:
 
         # Base growth rates (Thomistic habit formation)
         base_growth = {
-            'Ω': 0.005,  # Humility grows slowly through self-awareness
             'P': 0.008,  # Prudence through wise decision-making
             'J': 0.006,  # Justice through fair judgments
             'F': 0.007,  # Fortitude through perseverance
@@ -342,7 +341,6 @@ class ThomisticVirtueAdjuster:
         # Corrective adjustments for reasoning quality (temporary, to encourage improvement)
         if contradiction_level > 2:
             adjustments['P'] = -0.025  # Prudence: better logical consistency needed
-            adjustments['Ω'] = -0.01   # Humility: acknowledge reasoning limitations
 
         if logical_consistency < 0.3:
             adjustments['J'] = -0.02   # Justice: fair assessment of arguments

@@ -25,6 +25,11 @@ def extract_text_from_pdf(pdf_path: str) -> str:
     doc.close()
     return text
 
+def extract_text_from_txt(txt_path: str) -> str:
+    """Extract text from TXT file."""
+    with open(txt_path, 'r', encoding='utf-8', errors='ignore') as f:
+        return f.read()
+
 def chunk_text_with_overlap(text: str, chunk_size: int = 1000, overlap: int = 200) -> List[Dict[str, Any]]:
     """Split text into chunks with metadata."""
     tokens = tiktoken.get_encoding("cl100k_base").encode(text)

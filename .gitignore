@@ -14,6 +14,7 @@ chroma/
 *.pdf
 *.docx
 *.txt
+backend/tcmve_imutable_core_sermon.py
 
 # Python cache
 __pycache__/

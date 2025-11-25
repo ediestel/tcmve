@@ -96,9 +96,15 @@ export default function TLPO() {
                       <div>
                         <h3 className="font-semibold text-gray-600 mb-2">TLPO Markup (XML)</h3>
                         <pre className="bg-gray-50 p-3 rounded text-xs overflow-x-auto text-gray-600">
-                          {run.tlpo_markup.slice(0, 800)}...
+                          {run.tlpo_markup}
                         </pre>
                       </div>
+                      <details className="mt-4">
+                        <summary className="cursor-pointer text-sm font-semibold text-gray-600">Show full TCMVE trace (rounds, virtues, logs)</summary>
+                        <pre className="mt-2 bg-gray-900 text-green-400 p-4 rounded overflow-auto max-h-96 text-xs">
+                          {JSON.stringify(run, null, 2)}
+                        </pre>
+                      </details>
                     </div>
                   </CardContent>
                 </Card>

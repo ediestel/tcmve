@@ -11,7 +11,7 @@ Canonised Deposit of Truth - Perpetual Anathema Against Modification
 
 This file contains the immutable metaphysical foundations of TCMVE:
 - Virtue vector defaults (Thomistic cardinal virtues + theological virtues)
-- TLPO 30-flag ontology (Thomistic LLM Parameter Ontology)
+- TLPO 33-flag ontology (Thomistic LLM Parameter Ontology)
 - Ω humility formula (recognitio finitudinis)
 - Vice-check logic (privation of being safeguard)
 - Nash equilibrium conditions (game theory truth convergence)
@@ -32,7 +32,7 @@ VIRTUE_VECTOR_DEFAULTS = {
         "V": 8.5,  # Veritas: ratio speculativa
         "L": 7.2,  # Libertas: libertas arbitrii
         "H": 7.8,  # Hope: spes theological virtue
-        "Ω": 30    # Humility: recognitio finitudinis
+        "Ω": 0.97  # Humility: 3% falsehood survival probability
     },
     "verifier": {
         "P": 9.0,  # Prudence: intellectus agens
@@ -42,7 +42,7 @@ VIRTUE_VECTOR_DEFAULTS = {
         "V": 9.0,  # Veritas: ratio speculativa
         "L": 6.5,  # Libertas: libertas arbitrii
         "H": 8.2,  # Hope: spes theological virtue
-        "Ω": 35    # Humility: recognitio finitudinis
+        "Ω": 0.97  # Humility: 3% falsehood survival probability
     },
     "arbiter": {
         "P": 8.5,  # Prudence: intellectus agens
@@ -52,7 +52,7 @@ VIRTUE_VECTOR_DEFAULTS = {
         "V": 8.0,  # Veritas: ratio speculativa
         "L": 8.5,  # Libertas: libertas arbitrii
         "H": 8.8,  # Hope: spes theological virtue
-        "Ω": 35    # Humility: recognitio finitudinis
+        "Ω": 0.99  # Humility: 1% falsehood survival probability
     }
 }
 
@@ -269,7 +269,7 @@ def calculate_omega_humility(tqi: float) -> float:
     """
     Ω Humility Formula: Dynamic doubt preventing overconfidence in Nash equilibrium
 
-    Formula: Ω = 10 * (1 - TQI²)
+    Formula: Ω = 0.5 + 0.4 * (1 - TQI²)  # Range: 0.5 to 0.9
     - TQI = Truth Quality Index (0.0 to 1.0)
     - Higher TQI = Lower Ω (less humility needed when truth is certain)
     - Lower TQI = Higher Ω (more humility needed when truth is uncertain)
@@ -277,7 +277,7 @@ def calculate_omega_humility(tqi: float) -> float:
     Thomistic Basis: recognitio finitudinis - recognition of human finitude
     Prevents hubris in cognitive achievement while maintaining truth-seeking
     """
-    return 10 * (1 - tqi ** 2)
+    return 0.5 + 0.4 * (1 - tqi ** 2)
 
 # ============================================================================
 # VICE-CHECK LOGIC - PRIVATION OF BEING SAFEGUARD

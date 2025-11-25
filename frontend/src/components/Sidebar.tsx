@@ -17,7 +17,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 bg-white shadow-lg p-4">
+    <aside className="w-48 bg-white shadow-lg p-4">
       <h1 className="text-2xl font-bold text-gray-600 mb-8">nTGT-Ω</h1>
       <nav className="space-y-4">
         {navigation.map((item) => (

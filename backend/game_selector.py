@@ -87,7 +87,7 @@ class DynamicGameSelector:
         "multiplay"      # Synthesis: Collective Intelligence
     ]
 
-    def select_games_dynamic(self, virtue_vectors: Dict[str, List[float]],
+    def select_games_dynamic(self, virtue_vectors: Dict[str, Dict[str, float]],
                            query_context: str = "",
                            max_games: int = 3,
                            execution_mode: str = "sequential",
@@ -174,16 +174,16 @@ class DynamicGameSelector:
 
         return selected_games
 
-    def _calculate_average_virtues(self, virtue_vectors: Dict[str, List[float]]) -> Dict[str, float]:
+    def _calculate_average_virtues(self, virtue_vectors: Dict[str, Dict[str, float]]) -> Dict[str, float]:
         """Calculate average virtue values across all agents"""
         virtue_names = ['Ω', 'P', 'J', 'F', 'T', 'L', 'V', 'H']  # Humility, Prudence, Justice, Fortitude, Temperance, Love, Faith, Hope
 
         avg_virtues = {}
-        for i, virtue in enumerate(virtue_names):
+        for virtue in virtue_names:
             values = []
             for agent in ['generator', 'verifier', 'arbiter']:
-                if agent in virtue_vectors and len(virtue_vectors[agent]) > i:
-                    values.append(virtue_vectors[agent][i])
+                if agent in virtue_vectors and virtue in virtue_vectors[agent]:
+                    values.append(virtue_vectors[agent][virtue])
             avg_virtues[virtue] = sum(values) / len(values) if values else 0.5
 
         return avg_virtues

@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
-import { VirtueSlider } from "@/components/ui/virtue-slider"
+
 import { toast } from "sonner";
 import ReactMarkdown from 'react-markdown';
 import { api } from "@/lib/api";
@@ -17,28 +17,17 @@ import Sidebar from "@/components/Sidebar";
 
 import type {
   TCMVEResult,
-  DefaultsResponse,
-  AvailablePresets,
   TCMVEFlags,
   RunQueryPayload
 } from "@/lib/types";
 
-const virtues = [
-  "Ω Humility",
-  "P Prudence",
-  "J Justice",
-  "F Fortitude",
-  "T Temperance",
-  "V Faith",
-  "L Love",
-  "H Hope"
-] as const;
+
 
 export default function Dashboard() {
   const [query, setQuery] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [lastResult, setLastResult] = useState<TCMVEResult | null>(null);
-  const [defaults, setDefaults] = useState<DefaultsResponse | null>(null);
+
   const [loading, setLoading] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
   const [liveAnswer, setLiveAnswer] = useState("");
@@ -53,22 +42,18 @@ export default function Dashboard() {
   useEffect(() => {
     const load = async () => {
       try {
-        const [config, defaults, presets, sets] = await Promise.all([
+        const [config, defaults, sets] = await Promise.all([
           api.getConfig(),
           api.getDefaults(),
-          api.getPresets(),
           api.getRecommendedSets(),
         ]);
-        if (config.virtues) {
-          if (config.virtues.generator) setGenerator(config.virtues.generator);
-          if (config.virtues.verifier) setVerifier(config.virtues.verifier);
-          if (config.virtues.arbiter) setArbiter(config.virtues.arbiter);
-        }
+        // Load virtues from defaults
+        if (defaults.generator) setGenerator(Object.values(defaults.generator));
+        if (defaults.verifier) setVerifier(Object.values(defaults.verifier));
+        if (defaults.arbiter) setArbiter(Object.values(defaults.arbiter));
         if (config.flags) {
           setFlags(prev => ({ ...prev, ...config.flags }));
         }
-        setDefaults(defaults);
-        setAvailablePresets(presets);
         setAvailableSets(sets.sets);
       } catch (error) {
         console.error(error);
@@ -85,45 +70,12 @@ export default function Dashboard() {
   const [verifier, setVerifier] = useState<number[]>([0.9, 0.9, 0.95, 0.8, 0.9, 0.65, 0.9, 0.95]);
   const [arbiter, setArbiter] = useState<number[]>([0.85, 0.85, 0.8, 0.9, 0.85, 0.85, 0.8, 0.85]);
 
-  const loadPreset = (role: string) => {
-    if (defaults && defaults[role as keyof DefaultsResponse]) {
-      const vals = Object.values(defaults[role as keyof DefaultsResponse]) as number[];
-      if (role === 'generator') setGenerator(vals);
-      else if (role === 'verifier') setVerifier(vals);
-      else if (role.startsWith('arbiter')) setArbiter(vals);
-    }
-  };
 
-  const applyVirtuePreset = async (presetName: string) => {
-    try {
-      // Get full preset details including recommended games
-      const presetDetails = await api.getPreset(presetName);
-      const result = await api.applyPreset(presetName);
 
-      // Update local state with the preset values
-      const preset = result.virtue_vectors;
-      setGenerator(Object.values(preset.generator) as number[]);
-      setVerifier(Object.values(preset.verifier) as number[]);
-      setArbiter(Object.values(preset.arbiter) as number[]);
-      setCurrentPreset(presetName);
 
-      // Set recommended games (but don't auto-switch mode)
-      const games = presetDetails.recommended_games || [];
-      setRecommendedGames(games);
 
-      toast.success(`Applied ${presetName.replace('_', ' ')} preset with ${games.length} recommended games`);
-    } catch (error) {
-      toast.error(`Failed to apply ${presetName} preset`);
-      console.error(error);
-    }
-  };
 
-  const arbiterPresets = defaults ? Object.keys(defaults).filter(key => key.startsWith('arbiter')) : [];
-  const [selectedArbiterPreset, setSelectedArbiterPreset] = useState('arbiter');
-
-  // Virtue presets state
-  const [availablePresets, setAvailablePresets] = useState<AvailablePresets>({});
-  const [currentPreset, setCurrentPreset] = useState<string>('');
+  const [currentPreset] = useState<string>('');
   const [recommendedGames, setRecommendedGames] = useState<string[]>([]);
 
   // Recommended sets state
@@ -151,9 +103,9 @@ export default function Dashboard() {
     meanBiq: 100,
     sigmaBiq: 15,
     output: 'result',
-    generatorProvider: 'openai' as 'openai' | 'anthropic' | 'xai' | 'ollama',
-    verifierProvider: 'anthropic' as 'openai' | 'anthropic' | 'xai' | 'ollama',
-    arbiterProvider: 'xai' as 'openai' | 'anthropic' | 'xai' | 'ollama',
+    generatorProvider: 'openai' as 'openai' | 'anthropic' | 'xai' | 'ollama_1' | 'ollama_2' | 'ollama_3',
+    verifierProvider: 'anthropic' as 'openai' | 'anthropic' | 'xai' | 'ollama_1' | 'ollama_2' | 'ollama_3',
+    arbiterProvider: 'xai' as 'openai' | 'anthropic' | 'xai' | 'ollama_1' | 'ollama_2' | 'ollama_3',
     streammode: 'none',
   });
 
@@ -210,6 +162,7 @@ export default function Dashboard() {
       flags,
       gameMode,
       selectedGame,
+      ...(gameMode === 'recommended_set' && selectedSetId && { selectedSetId }),
       session_id: sessionId,
     };
 
@@ -252,23 +205,22 @@ export default function Dashboard() {
     <div className="min-h-screen bg-linear-to-br from-gray-50 via-gray-100 to-gray-50 text-gray-900 flex">
       <Sidebar />
       {/* Main Content */}
-      <main className="flex-1 p-4">
-        <div className="max-w-7xl mx-auto">
+      <main className="flex-1 p-2">
+        <div className="max-w-6xl mx-auto">
         <p className="text-center text-sm mb-8 text-blue-600">
           @ECKHART_DIESTEL — eIQ 2,441 — TQI 1.000 — V = {V}
         </p>
 
         <Tabs defaultValue="query" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8 bg-gray-200">
+          <TabsList className="grid w-full grid-cols-2 mb-8 bg-gray-200">
             <TabsTrigger value="query">Query & File</TabsTrigger>
-            <TabsTrigger value="virtues">Virtue Organ</TabsTrigger>
             <TabsTrigger value="flags">Flags & Settings</TabsTrigger>
           </TabsList>
 
           {/* ==================== TAB 1 – Query & File ==================== */}
           <TabsContent value="query" className="space-y-6">
-            <Card className="bg-white border-blue-300">
-              <CardContent className="space-y-6">
+            <Card className="bg-white border-white">
+              <CardContent className="space-y-1">
                 <div>
                   <Textarea
                     id="query"
@@ -342,6 +294,12 @@ export default function Dashboard() {
                           <Button onClick={() => navigator.clipboard.writeText(lastResult.final_answer)} variant="outline">Copy</Button>
                           <Button onClick={() => toast.success("Response already saved to database")} variant="outline">Saved</Button>
                         </div>
+                        <details className="mt-4">
+                          <summary className="cursor-pointer text-sm font-semibold text-gray-600">Show full TCMVE trace (rounds, virtues, logs)</summary>
+                          <pre className="mt-2 bg-gray-900 text-green-400 p-4 rounded overflow-auto max-h-96 text-xs">
+                            {JSON.stringify(lastResult, null, 2)}
+                          </pre>
+                        </details>
                       </CardContent>
                     </Card>
                   </div>
@@ -350,209 +308,7 @@ export default function Dashboard() {
             </Card>
           </TabsContent>
 
-          {/* ==================== TAB 2 – Virtue Organ (COMPLETE) ==================== */}
-          {/* ==================== TAB 2 – Virtue Organ (COMPLETE) ==================== */}
-<TabsContent value="virtues">
-  <div className="mb-6">
-    <h2 className="text-xl font-semibold mb-3">Domain-Specific Virtue Presets</h2>
-    <p className="text-sm text-gray-600 mb-4">
-      Click a preset to apply optimized virtue configurations for specific ethical domains.
-      {currentPreset && <span className="ml-2 font-medium text-blue-600">Current: {currentPreset.replace('_', ' ')}</span>}
-    </p>
 
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
-      {Object.entries(availablePresets).map(([presetName, description]) => (
-        <Button
-          key={presetName}
-          onClick={() => applyVirtuePreset(presetName)}
-          variant={currentPreset === presetName ? "default" : "outline"}
-          className={`text-xs p-2 h-auto ${
-            currentPreset === presetName
-              ? 'bg-blue-600 hover:bg-blue-700 text-white'
-              : 'hover:bg-blue-50 border-blue-200'
-          }`}
-          title={description as string}
-        >
-          <div className="text-center">
-            <div className="font-medium capitalize">
-              {presetName.replace('_', ' ')}
-            </div>
-            <div className="text-xs opacity-75 mt-1">
-              {presetName === 'healthcare_ethics' && '🏥'}
-              {presetName === 'autonomous_vehicles' && '🚗'}
-              {presetName === 'financial_risk' && '💰'}
-              {presetName === 'legal_justice' && '⚖️'}
-              {presetName === 'environmental_policy' && '🌱'}
-              {presetName === 'academic_integrity' && '🎓'}
-              {presetName === 'bauingenieur' && '🏗️'}
-              {presetName === 'psychotherapy_cbt' && '🧠'}
-            </div>
-          </div>
-        </Button>
-      ))}
-    </div>
-
-    {recommendedGames.length > 0 && (
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
-        <p className="text-sm text-blue-800">
-          <strong>🎮 Auto-selected Games:</strong> {recommendedGames.join(', ')} for {currentPreset.replace('_', ' ')} analysis
-        </p>
-      </div>
-    )}
-
-    <div className="border-t pt-4">
-      <h3 className="text-sm font-medium mb-2">Legacy Presets</h3>
-      <div className="flex space-x-2">
-        <Button onClick={() => loadPreset('generator')} variant="outline" size="sm">Generator Defaults</Button>
-        <Button onClick={() => loadPreset('verifier')} variant="outline" size="sm">Verifier Defaults</Button>
-        <select
-          value={selectedArbiterPreset}
-          onChange={(e) => { setSelectedArbiterPreset(e.target.value); loadPreset(e.target.value); }}
-          className="p-1 border rounded text-sm"
-        >
-          {arbiterPresets.map(preset => (
-            <option key={preset} value={preset}>{preset.replace('arbiter', 'Arbiter').replace('_', ' ')}</option>
-          ))}
-        </select>
-      </div>
-    </div>
-  </div>
-  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-    {/* ================================================== */}
-    {/* =================== GENERATOR ==================== */}
-    {/* ================================================== */}
-    <Card className="bg-white border-yellow-400">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl text-yellow-600">GENERATOR</CardTitle>
-        <p className="text-yellow-500">Creative Fire</p>
-      </CardHeader>
-
-      <CardContent>
-        <div className="grid grid-cols-4 gap-6">
-          {virtues.map((v, i) => (
-            <div key={v} className="flex flex-col items-center gap-1">
-
-              {/* virtue label */}
-              <div className="h-4 flex items-center justify-center">
-                <span className="text-xs text-yellow-600 text-center">{v}</span>
-              </div>
-
-              {/* fader */}
-              <VirtueSlider
-                value={[generator[i]]}
-                onValueChange={(val) => {
-                  const newG = [...generator];
-                  newG[i] = val[0];
-                  setGenerator(newG);
-                }}
-                min={0}
-                max={1}
-                step={0.01}
-                className="h-40"
-                aria-label={`Generator ${virtues[i]} slider`}
-              />
-
-              {/* percentage */}
-              <div className="h-4 flex items-center justify-center">
-                <span className="text-xs font-mono text-gray-700">{(generator[i] * 100).toFixed(0)}%</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-
-    {/* ================================================== */}
-    {/* ==================== VERIFIER ==================== */}
-    {/* ================================================== */}
-    <Card className="bg-white border-green-400">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl text-green-600">VALIDATOR</CardTitle>
-        <p className="text-green-500">Critical Steel</p>
-      </CardHeader>
-
-      <CardContent>
-        <div className="grid grid-cols-4 gap-6">
-          {virtues.map((v, i) => (
-            <div key={v} className="flex flex-col items-center gap-1">
-
-              {/* virtue label */}
-              <div className="h-4 flex items-center justify-center">
-                <span className="text-xs text-green-600 text-center">{v}</span>
-              </div>
-
-              {/* fader */}
-              <VirtueSlider
-                value={[verifier[i]]}
-                onValueChange={(val) => {
-                  const newV = [...verifier];
-                  newV[i] = val[0];
-                  setVerifier(newV);
-                }}
-                min={0}
-                max={1}
-                step={0.01}
-                className="h-40"
-                aria-label={`Verifier ${virtues[i]} slider`}
-              />
-
-              {/* percentage */}
-              <div className="h-4 flex items-center justify-center">
-                <span className="text-xs font-mono text-gray-700">{(verifier[i] * 100).toFixed(0)}%</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-
-    {/* ================================================== */}
-    {/* ==================== ARBITER ===================== */}
-    {/* ================================================== */}
-    <Card className="bg-white border-blue-400">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl text-blue-600">ARBITER</CardTitle>
-        <p className="text-blue-500">Thomistic Judge</p>
-      </CardHeader>
-
-      <CardContent>
-        <div className="grid grid-cols-4 gap-6">
-          {virtues.map((v, i) => (
-            <div key={v} className="flex flex-col items-center gap-1">
-
-              {/* virtue label */}
-              <div className="h-4 flex items-center justify-center">
-                <span className="text-xs text-blue-600 text-center">{v}</span>
-              </div>
-
-              {/* fader */}
-              <VirtueSlider
-                value={[arbiter[i]]}
-                onValueChange={(val) => {
-                  const newA = [...arbiter];
-                  newA[i] = val[0];
-                  setArbiter(newA);
-                }}
-                 min={0}
-                max={1}
-                step={0.01}
-                className="h-40"
-                aria-label={`Arbiter ${virtues[i]} slider`}
-              />
-
-              {/* percentage */}
-              <div className="h-4 flex items-center justify-center">
-                <span className="text-xs font-mono text-gray-700">{(arbiter[i] * 100).toFixed(0)}%</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-
-  </div>
-</TabsContent>
 
 
           {/* ==================== TAB 3 – Flags & Settings ==================== */}
@@ -591,8 +347,12 @@ export default function Dashboard() {
                   <Label htmlFor="marital-freedom">--marital-freedom</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Checkbox id="arbiter-only" checked={flags.arbiter_only} onCheckedChange={(c) => setFlags({ ...flags, arbiter_only: c as boolean })} />
-                  <Label htmlFor="arbiter-only">--arbiter-only</Label>
+                  <Checkbox id="use-arbiter" checked={flags.useArbiter} disabled={flags.arbiter_only} onCheckedChange={(c) => setFlags({ ...flags, useGenerator: true, useVerifier: true, useArbiter: c as boolean, arbiter_only: false })} />
+                  <Label htmlFor="use-arbiter">All Personas</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="arbiter-only" checked={flags.arbiter_only} disabled={flags.useArbiter} onCheckedChange={(c) => setFlags({ ...flags, arbiter_only: c as boolean, useGenerator: false, useVerifier: false, useArbiter: false })} />
+                  <Label htmlFor="arbiter-only">Arbiter Only</Label>
                 </div>
 
               </CardContent>
@@ -615,24 +375,7 @@ export default function Dashboard() {
                   <input type="radio" name="gameMode" value="recommended_set" checked={gameMode === 'recommended_set'} onChange={() => setGameMode('recommended_set')} className="w-4 h-4" />
                   <Label>Recommended Set</Label>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    name="engineMode"
-                    checked={flags.useGenerator && flags.useVerifier && flags.useArbiter}
-                    onChange={() => {
-                      setFlags(prev => ({
-                        ...prev,
-                        useGenerator: true,
-                        useVerifier: true,
-                        useArbiter: true,
-                        streammode: "all"
-                      }));
-                    }}
-                    className="w-4 h-4"
-                  />
-                  <Label>All Three Personas</Label>
-                </div>
+
                 {gameMode === 'separate' && (
                   <div>
                     <Label>Select Game {recommendedGames.length > 0 && (
@@ -769,9 +512,11 @@ export default function Dashboard() {
                     className="w-full p-2 border rounded mt-1"
                   >
                     <option value="openai">OpenAI</option>
-                    <option value="anthropic">Claude</option>
                     <option value="xai">Grok-4</option>
-                    <option value="ollama">Ollama</option>
+                    <option value="anthropic">Claude</option>
+                    <option value="ollama_1">Ollama Model 1 - qwen2.5:7b-instruct-q4_k_m</option>
+                    <option value="ollama_2">Ollama Model 2 - deepseek-r1:7b-qwen-distill-q4_K_M</option>
+                    <option value="ollama_3">Ollama Model 3 - qwen2.5-coder:7b-instruct-q4_k_m</option>
                   </select>
                 </div>
                 <div>
@@ -784,7 +529,9 @@ export default function Dashboard() {
                     <option value="openai">OpenAI</option>
                     <option value="anthropic">Claude</option>
                     <option value="xai">Grok-4</option>
-                    <option value="ollama">Ollama</option>
+                    <option value="ollama_1">Ollama Model 1 - qwen2.5:7b-instruct-q4_k_m</option>
+                    <option value="ollama_2">Ollama Model 2 - deepseek-r1:7b-qwen-distill-q4_K_M</option>
+                    <option value="ollama_3">Ollama Model 3 - mannix/llama3.1-8b-abliterated:latest</option>
                   </select>
                 </div>
                 <div>
@@ -793,7 +540,7 @@ export default function Dashboard() {
                     value={flags.arbiterProvider}
                     onChange={(e) => setFlags({ ...flags, arbiterProvider: e.target.value as TCMVEFlags['arbiterProvider'] })}
                     className={`w-full p-2 border rounded mt-1 font-bold text-white ${
-                      flags.arbiterProvider === 'ollama'
+                      flags.arbiterProvider.startsWith('ollama')
                         ? 'bg-emerald-600 hover:bg-emerald-700'
                         : flags.arbiterProvider === 'xai'
                         ? 'bg-indigo-600 hover:bg-indigo-700'
@@ -803,7 +550,9 @@ export default function Dashboard() {
                     <option value="openai">OpenAI</option>
                     <option value="anthropic">Claude</option>
                     <option value="xai">Grok-4</option>
-                    <option value="ollama">Ollama</option>
+                    <option value="ollama_1">Ollama Model 1 - qwen2.5:7b-instruct-q4_k_m</option>
+                    <option value="ollama_2">Ollama Model 2 - deepseek-r1:7b-qwen-distill-q4_K_M</option>
+                    <option value="ollama_3">Ollama Model 3 - qwen2.5-coder:7b-instruct-q4_k_m</option>
                   </select>
                 </div>
               </CardContent>

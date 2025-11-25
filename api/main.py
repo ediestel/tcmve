@@ -10,6 +10,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
 from backend.tcmve import TCMVE
+from backend.chunk_documents import extract_text_from_pdf, extract_text_from_txt
 from asyncio import Queue
 
 load_dotenv()
@@ -24,7 +25,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-engine = TCMVE(max_rounds=10)
+engine = TCMVE(max_rounds=3)
 active_ws: WebSocket | None = None
 
 def get_conn():
@@ -162,9 +163,46 @@ def get_config():
             if row:
                 d = dict(row)
                 d.pop("id", None)
-                d.pop("timestamp", None)
-                return d
-            return {}
+                d.pop("created_at", None)
+                d.pop("updated_at", None)
+
+                # Convert snake_case to camelCase for frontend
+                key_map_reverse = {
+                    "usegenerator": "useGenerator",
+                    "useverifier": "useVerifier",
+                    "usearbiter": "useArbiter",
+                    "generatorprovider": "generatorProvider",
+                    "verifierprovider": "verifierProvider",
+                    "arbiterprovider": "arbiterProvider",
+                    "maxrounds": "maxRounds",
+                    "maritalfreedom": "maritalFreedom",
+                    "vicecheck": "viceCheck",
+                    "selfrefine": "selfRefine",
+                    "streammode": "streamMode",
+                    "gamemode": "gameMode",
+                    "selectedgame": "selectedGame",
+                    "eiqlevel": "eiqLevel",
+                    "simulatedpersons": "simulatedPersons",
+                    "meanbiq": "meanBiq",
+                    "sigmabiq": "sigmaBiq",
+                    "tlpofull": "tlpoFull",
+                    "noxml": "noXml",
+                    "sevendomains": "sevenDomains",
+                    "virtuesindependent": "virtuesIndependent",
+                    "biqdistribution": "biqDistribution",
+                    "nashmode": "nashMode",
+                }
+
+                # Convert keys
+                converted = {}
+                for k, v in d.items():
+                    if k in key_map_reverse:
+                        converted[key_map_reverse[k]] = v
+                    else:
+                        converted[k] = v
+
+                return { "flags": converted, "virtues": {} }
+            return { "flags": {}, "virtues": {} }
 
 # SAVE config
 @app.post("/config")
@@ -235,7 +273,41 @@ def update_dashboard_stats():
 async def run_engine(request: Request):
     global engine
 
-    data = await request.json()
+    # Handle both JSON and FormData requests
+    if request.headers.get('content-type', '').startswith('multipart/form-data'):
+        form = await request.form()
+        data = dict(form)
+        # Parse JSON fields
+        if 'virtues' in data:
+            data['virtues'] = json.loads(data['virtues'])
+        if 'flags' in data:
+            data['flags'] = json.loads(data['flags'])
+        # Handle file upload
+        if 'file' in data and hasattr(data['file'], 'filename'):
+            uploaded_file = data['file']
+            # Save uploaded file temporarily and extract text
+            import tempfile
+            import os
+            from backend.chunk_documents import extract_text_from_pdf
+
+            with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(uploaded_file.filename)[1]) as tmp_file:
+                tmp_file.write(await uploaded_file.read())
+                tmp_file_path = tmp_file.name
+
+            try:
+                if uploaded_file.filename.lower().endswith('.pdf'):
+                    file_text = extract_text_from_pdf(tmp_file_path)
+                elif uploaded_file.filename.lower().endswith(('.txt', '.md')):
+                    file_text = extract_text_from_txt(tmp_file_path)
+                else:
+                    file_text = f"Unsupported file type: {uploaded_file.filename}"
+
+                # Prepend file content to query
+                data['query'] = f"Document content:\n{file_text}\n\nQuery: {data.get('query', '')}"
+            finally:
+                os.unlink(tmp_file_path)
+    else:
+        data = await request.json()
     query = html.escape(data.get("query", "")).strip()
     if not query:
         raise HTTPException(400, "Query required")
@@ -245,6 +317,24 @@ async def run_engine(request: Request):
 
     virtues = data.get("virtues", {})
     flags = data.get("flags", {})
+
+    # Include gameMode and selectedGame in flags for consistency
+    flags['gameMode'] = data.get('gameMode', 'all')
+    flags['selectedGame'] = data.get('selectedGame')
+
+    # Handle recommended set games
+    gameMode = data.get('gameMode', 'all')
+    selectedSetId = data.get('selectedSetId')
+    if gameMode == 'recommended_set' and selectedSetId:
+        with get_conn() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as c:
+                c.execute("SELECT games FROM recommended_sets WHERE id = %s", (selectedSetId,))
+                row = c.fetchone()
+                if row:
+                    available_games = row['games']
+                else:
+                    available_games = []
+        setattr(args, 'available_games', available_games)
 
     # Load existing config from DB as base
     with get_conn() as conn:
@@ -300,6 +390,9 @@ async def run_engine(request: Request):
                     "viceCheck": True,
                     "selfRefine": True,
                     "streamMode": "arbiter_only",
+                    "contentPreservationMode": "preserve",  # Options: 'preserve', 'flag', 'edit'
+                    "fullContent": True,  # Legacy
+                    "fullContentRedactOnly": False,  # Legacy
                 }
                 flags = {**defaults, **flags}
 
@@ -428,7 +521,8 @@ async def run_engine(request: Request):
                                 final_answer, converged, rounds,
                                 tlpo_scores, tlpo_markup,
                                 eiq, tqi, tcs, fd, es,
-                                tokens_used, cost_estimate
+                                tokens_used, cost_estimate,
+                                history, log_buffer
                             )
                             VALUES (
                                 %s, %s,
@@ -437,6 +531,7 @@ async def run_engine(request: Request):
                                 %s, %s, %s,
                                 %s, %s,
                                 %s, %s, %s, %s, %s,
+                                %s, %s,
                                 %s, %s
                             )
                             """,
@@ -463,6 +558,8 @@ async def run_engine(request: Request):
                                 result.get("metrics", {}).get("ES"),
                                 result.get("tokens_used"),
                                 result.get("cost_estimate"),
+                                json.dumps(result.get("history", [])),
+                                json.dumps(result.get("log_buffer", [])),
                             ),
                         )
                         conn.commit()
@@ -545,7 +642,7 @@ def get_runs(limit: int = None):
         with conn.cursor(cursor_factory=RealDictCursor) as c:
             query = """
                 SELECT id, query, description, final_answer, eiq, tqi, tokens_used, cost_estimate,
-                       tlpo_scores, tlpo_markup, created_at as timestamp
+                       tlpo_scores, tlpo_markup, created_at as timestamp, history, log_buffer
                 FROM runs
                 ORDER BY id DESC
             """
@@ -560,6 +657,8 @@ def get_runs(limit: int = None):
                 run = dict(row)
                 # Parse JSON fields
                 tlpo_scores = json.loads(run.get("tlpo_scores", "{}")) if run.get("tlpo_scores") else {}
+                history = json.loads(run.get("history", "[]")) if run.get("history") else []
+                log_buffer = json.loads(run.get("log_buffer", "[]")) if run.get("log_buffer") else []
                 # Create nested result structure like dashboard stats
                 run["result"] = {
                     "final_answer": run.get("final_answer", ""),
@@ -569,16 +668,14 @@ def get_runs(limit: int = None):
                     "cost_estimate": run.get("cost_estimate", 0),
                     "four_causes": tlpo_scores.get("four_causes", {}),
                     "ontology": tlpo_scores.get("ontology", []),
-                    "flags": tlpo_scores.get("flags", [])
+                    "flags": tlpo_scores.get("flags", []),
+                    "history": history,
+                    "log_buffer": log_buffer
                 }
-                # Remove fields that are now in result
-                run.pop("final_answer", None)
-                run.pop("eiq", None)
-                run.pop("tqi", None)
-                run.pop("tokens_used", None)
-                run.pop("cost_estimate", None)
-                run.pop("tlpo_scores", None)
-                run.pop("tlpo_markup", None)
+                # Keep original fields for backward compatibility
+                run["tlpo_scores"] = tlpo_scores
+                run["history"] = history
+                run["log_buffer"] = log_buffer
                 runs.append(run)
 
             return runs
@@ -617,17 +714,61 @@ def get_dashboard_stats():
 @app.get("/presets")
 def get_presets():
     """Get available virtue presets for domain-specific analysis."""
-    from backend.virtue_presets import list_presets
-    return {"presets": list_presets()}
+    from backend.virtue_presets import list_presets_db
+    return {"presets": list_presets_db()}
 
 @app.get("/presets/{preset_name}")
 def get_preset(preset_name: str):
     """Get a specific virtue preset configuration."""
-    from backend.virtue_presets import get_preset
+    from backend.virtue_presets import load_preset_from_database
     try:
-        return get_preset(preset_name)
+        return load_preset_from_database(preset_name)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+@app.post("/presets")
+async def create_preset(request: Request):
+    """Create a new virtue preset."""
+    from backend.virtue_presets import create_preset_db
+    data = await request.json()
+    try:
+        create_preset_db(
+            data['name'],
+            data['description'],
+            data['virtue_vectors'],
+            data.get('recommended_games', []),
+            data.get('use_case', '')
+        )
+        return {"message": "Preset created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.put("/presets/{preset_name}")
+async def update_preset(preset_name: str, request: Request):
+    """Update an existing virtue preset."""
+    from backend.virtue_presets import update_preset_db
+    data = await request.json()
+    try:
+        update_preset_db(
+            preset_name,
+            data['description'],
+            data['virtue_vectors'],
+            data.get('recommended_games', []),
+            data.get('use_case', '')
+        )
+        return {"message": "Preset updated successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.delete("/presets/{preset_name}")
+def delete_preset(preset_name: str):
+    """Delete a virtue preset."""
+    from backend.virtue_presets import delete_preset_db
+    try:
+        delete_preset_db(preset_name)
+        return {"message": "Preset deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @app.post("/apply-preset/{preset_name}")
 def apply_preset(preset_name: str):
